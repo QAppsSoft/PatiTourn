@@ -70,7 +70,7 @@ namespace PatiTournApp.Views
 
             var dialog = new ContentDialog
             {
-                Content = new CompetitionProxyEditorView(),
+                Content = new CompetitionProxyView(),
                 DataContext = competitionProxy,
                 Title = "Edit competition",
                 PrimaryButtonText = "Ok"
