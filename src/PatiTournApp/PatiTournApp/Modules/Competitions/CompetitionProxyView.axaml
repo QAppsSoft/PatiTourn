@@ -7,17 +7,17 @@
              x:DataType="competitions:CompetitionProxy"
              x:CompileBindings="True"
              x:Class="PatiTournApp.Modules.Competitions.CompetitionProxyView">
-    <Grid RowDefinitions="* * * * * * * *">
-        <TextBlock Grid.Row="0" Text="Name:" />
-        <TextBox Grid.Row="1" Text="{Binding Name}" />
+    <Grid RowDefinitions="* * * * * * * *" ColumnDefinitions="* *">
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Name:" />
+        <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Name}" />
 
-        <TextBlock Grid.Row="2" Text="Category:" />
-        <TextBox Grid.Row="3" Text="{Binding Category}" />
+        <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="Category:" />
+        <TextBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Category}" />
 
-        <TextBlock Grid.Row="4" Text="Start date:" />
-        <CalendarDatePicker Grid.Row="5" Text="{Binding StartDate}" />
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Start date:" />
+        <CalendarDatePicker Grid.Row="5" Grid.Column="0" SelectedDate="{Binding StartDate}" />
 
-        <TextBlock Grid.Row="6" Text="End date:" />
-        <CalendarDatePicker Grid.Row="7" Text="{Binding EndDate}" />
+        <TextBlock Grid.Row="4" Grid.Column="1" Text="End date:" />
+        <CalendarDatePicker Grid.Row="5" Grid.Column="1" SelectedDate="{Binding EndDate}" />
     </Grid>
 </UserControl>
