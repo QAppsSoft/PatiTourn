@@ -1,0 +1,81 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:competitions="clr-namespace:ViewModels.Modules.Competitions;assembly=ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" MinWidth="400"
+             x:DataType="competitions:CompetitionsViewModel"
+             x:CompileBindings="True"
+             x:Class="PatiTournApp.Modules.Competitions.CompetitionsView">
+
+    <UserControl.Styles>
+        <!-- FilterTextBox -->
+        <Style Selector="TextBox.FilterTextBox">
+            <Setter Property="InnerRightContent">
+                <Template>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="&#xE8BB;"
+                                FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                x:CompileBindings="False"
+                                Command="{Binding $parent[TextBox].Clear}"
+                                IsVisible="{Binding Text, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                        <Button Content="&#xE721;"
+                                FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                x:CompileBindings="False"
+                                Command="{Binding $parent[TextBox].Clear}"
+                                IsHitTestVisible="False" />
+                    </StackPanel>
+                </Template>
+            </Setter>
+        </Style>
+    </UserControl.Styles>
+
+    <DockPanel LastChildFill="True">
+        <Grid ColumnDefinitions="* Auto" DockPanel.Dock="Top">
+            <TextBox x:Name="FilterTextBox" Grid.Column="0" Watermark="Filter competitions list"
+                     Classes="FilterTextBox" />
+            <Button Grid.Column="1" 
+                    Margin="8 0 0 0"
+                    Content="&#xE710;" 
+                    Height="32" 
+                    FontFamily="{StaticResource SymbolThemeFontFamily}"
+                    Command="{Binding AddNew}" />
+        </Grid>
+        <ListBox x:Name="CompetitionsListBox"
+                 Items="{Binding Competitions}"
+                 SelectedItem="{Binding SelectedCompetitionProxy}">
+
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="competitions:CompetitionProxy" x:CompileBindings="True">
+                    <Grid RowDefinitions="Auto Auto" ColumnDefinitions="* Auto Auto">
+                        <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Name}" FontWeight="Bold"
+                                   FontSize="16" />
+                        <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding  Category}"
+                                   FontStyle="Italic" />
+
+                        <Button Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
+                                x:CompileBindings="False"
+                                Margin="0 0 8 0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Content="&#xE70F;"
+                                FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                Command="{Binding DataContext.Edit, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}}"
+                                CommandParameter="{Binding}"
+                                IsHitTestVisible="True"
+                                Cursor="Hand" />
+                        <Button Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" HorizontalAlignment="Center"
+                                x:CompileBindings="False"
+                                VerticalAlignment="Center"
+                                Content="&#xE74D;"
+                                FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                Command="{Binding ElementName=CompetitionsListBox, Path=DataContext.Delete}"
+                                CommandParameter="{Binding}"
+                                IsHitTestVisible="True"
+                                Cursor="Hand" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </DockPanel>
+</UserControl>

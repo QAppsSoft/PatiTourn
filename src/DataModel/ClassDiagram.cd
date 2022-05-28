@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DataModel.Event">
+    <Position X="3.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAIQQAAACAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Event.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataModel.Person">
+    <Position X="11.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAABAAAAAAAAAQAAAAAAAAAAAAAAAAAgAg=</HashCode>
+      <FileName>Person.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataModel.Referee">
+    <Position X="12.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Referee.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataModel.Skater">
+    <Position X="10" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAIAACAACAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Skater.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataModel.SprintPosition">
+    <Position X="7.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAECAAAAAAAAAIIBAAAAAAAA=</HashCode>
+      <FileName>SprintPosition.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataModel.Position">
+    <Position X="7.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAEAAAAgAAAAAAQAIAAAAAAAAAAAEAAAAAAAQA=</HashCode>
+      <FileName>Position.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Skater" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="DataModel.Sprint">
+    <Position X="4.5" Y="9" Width="1.5" />
+    <AssociationLine Name="SprintPositions" Type="DataModel.SprintPosition" FixedToPoint="true">
+      <Path>
+        <Point X="6" Y="9.812" />
+        <Point X="7.25" Y="9.812" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="Positions" Type="DataModel.Position" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6" Y="9.188" />
+        <Point X="6.579" Y="9.188" />
+        <Point X="6.579" Y="8.125" />
+        <Point X="7.25" Y="8.125" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sprint.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="SprintPositions" />
+      <Property Name="Positions" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="DataModel.IndividualEvent">
+    <Position X="4.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IndividualEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataModel.Competition">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACCAAAAAAAAAAAAAAAEAQgAgAAAAAAAAAAAUAACAA=</HashCode>
+      <FileName>Competition.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Events" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="DataModel.TeamEvent">
+    <Position X="2.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TeamEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

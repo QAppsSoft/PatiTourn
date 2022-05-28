@@ -1,0 +1,66 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:ViewModels;assembly=ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="PatiTournApp.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        x:DataType="viewModels:MainWindowViewModel"
+        x:CompileBindings="True"
+        Title="PatiTourn">
+    <Window.Resources>
+    </Window.Resources>
+    <!--Title bar-->
+    <DockPanel LastChildFill="True">
+        <Grid Background="Transparent"
+              Height="44"
+              Name="TitleBarHost"
+              ColumnDefinitions="Auto Auto *"
+              DockPanel.Dock="Top">
+            <Image Margin="12 4"
+                   IsHitTestVisible="False"
+                   Width="18" Height="18"
+                   DockPanel.Dock="Left"
+                   Name="WindowIcon" />
+
+            <TextBlock x:CompileBindings="False"
+                       Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                       FontSize="12"
+                       IsHitTestVisible="False"
+                       VerticalAlignment="Center"
+                       Grid.Column="1" />
+
+            <Border Grid.Column="2" Padding="6" />
+        </Grid>
+
+        <Panel>
+            <Border IsVisible="{Binding !CompetitionHasValue}">
+                <Grid ColumnDefinitions="* * * * *" RowDefinitions="* * *">
+                    <Button Grid.Column="1" Grid.Row="1"
+                            HorizontalAlignment="Center"
+                            Content="&#xE948;"
+                            FontFamily="{StaticResource SymbolThemeFontFamily}"
+                            FontSize="32"
+                            x:DataType="viewModels:MainWindowViewModel"
+                            Command="{Binding CompetitionsViewModel.AddNew}"
+                            Cursor="Hand" />
+                    <TextBlock Grid.Column="1" Grid.Row="2" Text="Add" HorizontalAlignment="Center" />
+
+                    <Button Grid.Column="3" Grid.Row="1"
+                            HorizontalAlignment="Center"
+                            Content="&#xE721;"
+                            FontFamily="{StaticResource SymbolThemeFontFamily}"
+                            FontSize="32"
+                            x:DataType="viewModels:MainWindowViewModel"
+                            Command="{Binding SearchCompetitions}"
+                            Cursor="Hand" />
+                    <TextBlock Grid.Column="3" Grid.Row="2" Text="Search" HorizontalAlignment="Center" />
+                </Grid>
+            </Border>
+
+            <ContentControl IsVisible="{Binding  CompetitionHasValue}"
+                            Content="{Binding CompetitionsViewModel.SelectedCompetitionProxy}" />
+        </Panel>
+    </DockPanel>
+</Window>
