@@ -2,6 +2,7 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Common;
 using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -11,10 +12,12 @@ namespace ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public MainWindowViewModel(CompetitionsViewModel competitionsViewModel)
+        public MainWindowViewModel(CompetitionsViewModel competitionsViewModel, ISchedulerProvider schedulerProvider)
         {
             CompetitionsViewModel =
                 competitionsViewModel ?? throw new ArgumentNullException(nameof(competitionsViewModel));
+
+            CompetitionsDialog = new Interaction<CompetitionsViewModel, CompetitionProxy>(schedulerProvider.Dispatcher);
 
             SearchCompetitions = ReactiveCommand.CreateFromTask(ShowSearchDialogAsync);
 
@@ -28,7 +31,7 @@ namespace ViewModels
 
         [ObservableAsProperty] public bool CompetitionHasValue { get; } = false;
 
-        public Interaction<CompetitionsViewModel, CompetitionProxy> CompetitionsDialog { get; } = new();
+        public Interaction<CompetitionsViewModel, CompetitionProxy> CompetitionsDialog { get; }
 
         public ReactiveCommand<Unit, Unit> SearchCompetitions { get; }
 

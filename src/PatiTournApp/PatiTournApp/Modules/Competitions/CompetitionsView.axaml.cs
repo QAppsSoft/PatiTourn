@@ -53,7 +53,7 @@ namespace PatiTournApp.Modules.Competitions
                 CloseButtonCommand = deleteDialogViewModel.CancelCommand
             };
 
-            await dialog.ShowAsync();
+            await dialog.ShowAsync().ConfigureAwait(false);
 
             interaction.SetOutput(deleteDialogViewModel.CanDelete);
         }
@@ -74,7 +74,7 @@ namespace PatiTournApp.Modules.Competitions
                 .ObserveOn(AvaloniaScheduler.Instance)
                 .Subscribe(valid => dialog.IsPrimaryButtonEnabled = valid);
 
-            await dialog.ShowAsync();
+            await dialog.ShowAsync().ConfigureAwait(false);
 
             interaction.SetOutput(Unit.Default);
         }
