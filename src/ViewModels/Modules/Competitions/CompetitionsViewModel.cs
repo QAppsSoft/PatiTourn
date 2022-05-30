@@ -28,6 +28,10 @@ namespace ViewModels.Modules.Competitions
         {
             _competitionService = competitionService ?? throw new ArgumentNullException(nameof(competitionService));
 
+            ConfirmDeleteDialog = new Interaction<CompetitionProxy, bool>(schedulerProvider.Dispatcher);
+
+            EditDialog = new Interaction<CompetitionProxy, Unit>(schedulerProvider.Dispatcher);
+
             var transform = competitionService.List.Connect()
                 .Transform(competition => new CompetitionProxy(competition))
                 .Publish();
@@ -93,9 +97,9 @@ namespace ViewModels.Modules.Competitions
             Refresh.Execute().Subscribe();
         }
 
-        public Interaction<CompetitionProxy, bool> ConfirmDeleteDialog { get; } = new();
+        public Interaction<CompetitionProxy, bool> ConfirmDeleteDialog { get; }
 
-        public Interaction<CompetitionProxy, Unit> EditDialog { get; } = new();
+        public Interaction<CompetitionProxy, Unit> EditDialog { get; }
 
         public ReactiveCommand<Unit, int> Save { get; }
 

@@ -80,7 +80,7 @@ namespace PatiTournApp.Views
                 .ObserveOn(AvaloniaScheduler.Instance)
                 .Subscribe(valid => dialog.IsPrimaryButtonEnabled = valid);
 
-            await dialog.ShowAsync();
+            await dialog.ShowAsync().ConfigureAwait(false);
 
             interaction.SetOutput(Unit.Default);
         }
