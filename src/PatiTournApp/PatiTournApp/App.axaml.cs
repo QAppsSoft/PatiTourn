@@ -17,7 +17,7 @@ namespace PatiTournApp
 {
     public partial class App : Application
     {
-        public static IServiceProvider Services = null!; // Initialized before use
+        private static IServiceProvider services = null!; // Initialized before use
 
         public override void Initialize()
         {
@@ -30,7 +30,7 @@ namespace PatiTournApp
 
             ConfigureDatabase();
 
-            var viewModel = Services.GetService<MainWindowViewModel>();
+            var viewModel = services.GetService<MainWindowViewModel>();
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
@@ -40,7 +40,7 @@ namespace PatiTournApp
                 var onShutdown = Observable.FromEventPattern<ShutdownRequestedEventArgs>(
                         handler => desktop.ShutdownRequested += handler,
                         handler => desktop.ShutdownRequested -= handler)
-                    .Subscribe(_ => Services.GetService<PatiTournDataBaseContext>()?.Database.EnsureDeleted());
+                    .Subscribe(_ => services.GetService<PatiTournDataBaseContext>()?.Database.EnsureDeleted());
 #endif
             }
             else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
@@ -54,7 +54,7 @@ namespace PatiTournApp
         private static void ConfigureDatabase()
         {
 #if DEBUG
-            using var context = Services.GetService<PatiTournDataBaseContext>();
+            using var context = services.GetService<PatiTournDataBaseContext>();
             context?.Database.EnsureCreated();
 #endif
 #if !DEBUG
@@ -65,25 +65,24 @@ namespace PatiTournApp
 
         private static void ConfigureServiceProvider()
         {
-            var services = ConfigureServices();
-            Services = services.BuildServiceProvider();
+            App.services = ConfigureServices().BuildServiceProvider();
         }
 
         private static IServiceCollection ConfigureServices()
         {
-            var services = new ServiceCollection();
+            var serviceCollection = new ServiceCollection();
 
-            services.AddSingleton<ISchedulerProvider, SchedulerProvider>();
+            serviceCollection.AddSingleton<ISchedulerProvider, SchedulerProvider>();
 
-            services.AddDbContext<PatiTournDataBaseContext>(options =>
+            serviceCollection.AddDbContext<PatiTournDataBaseContext>(options =>
                 options.UseSqlite(@"Data Source=PatiTourn.db;"),
                 ServiceLifetime.Transient,
                 ServiceLifetime.Singleton);
 
-            RegisterEntities(services);
+            RegisterEntities(serviceCollection);
             
             // Auto-register all view-models
-            services.Scan(scan =>
+            serviceCollection.Scan(scan =>
             {
                 scan.FromAssemblyOf<IViewModel>()
                     .AddClasses(classes => classes.AssignableTo<IViewModel>())
@@ -91,7 +90,7 @@ namespace PatiTournApp
                     .WithSingletonLifetime();
             });
 
-            return services;
+            return serviceCollection;
         }
 
         private static void RegisterEntities(IServiceCollection services)

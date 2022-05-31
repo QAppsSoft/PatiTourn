@@ -59,7 +59,7 @@ namespace PatiTournApp.Views
                 .ObserveOn(AvaloniaScheduler.Instance)
                 .Subscribe(valid => dialog.IsPrimaryButtonEnabled = valid);
 
-            await dialog.ShowAsync();
+            await dialog.ShowAsync().ConfigureAwait(false);
 
             interaction.SetOutput(competitionsViewModel.SelectedCompetitionProxy!); // Ignored because the dialog cant be closed if a CompetitionProxy is not selected
         }

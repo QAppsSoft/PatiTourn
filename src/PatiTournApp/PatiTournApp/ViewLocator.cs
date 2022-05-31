@@ -39,7 +39,7 @@ namespace PatiTournApp
 
         private static Control? CreateInstanceFor(string viewTrailingName, string name)
         {
-            var getViewName = name.Replace("ViewModel", viewTrailingName);
+            var getViewName = name.Replace("ViewModel", viewTrailingName, StringComparison.InvariantCulture);
 
             var type = Type.GetType(getViewName);
 
