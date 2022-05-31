@@ -39,6 +39,10 @@ namespace PatiTournApp.Views
                     .RegisterHandler(DoShowEditDialogAsync)
                     .DisposeWith(disposable);
             });
+
+            this.WhenAnyValue(x => x.ViewModel)
+                .Select(_ => Unit.Default)
+                .InvokeCommand(this, x => x.ViewModel.CompetitionsViewModel.Refresh);
         }
 
         private static async Task DoShowCompetitionsDialogAsync(InteractionContext<CompetitionsViewModel, CompetitionProxy> interaction)
@@ -87,7 +91,14 @@ namespace PatiTournApp.Views
 
         #region IViewFor<MainWindowViewModel> implementation
 
-        public MainWindowViewModel? ViewModel { get; set; }
+        /// <summary>
+        /// The ViewModel.
+        /// </summary>
+        public MainWindowViewModel? ViewModel
+        {
+            get => GetValue(ViewModelProperty);
+            set => SetValue(ViewModelProperty, value);
+        }
         object? IViewFor.ViewModel
         {
             get => ViewModel;
