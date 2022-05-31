@@ -60,13 +60,9 @@ namespace ViewModels.Modules.Competitions
                     }
                 });
 
-            var anySelected = this.WhenAnyValue(vm => vm.SelectedCompetitionProxy)
-                .Select(competitionProxy => competitionProxy != null)
-                .Publish();
-
             Delete = ReactiveCommand.CreateFromTask<CompetitionProxy>(DeleteCompetitionAsync);
 
-            Refresh = ReactiveCommand.Create(competitionService.Refresh, anySelected);
+            Refresh = ReactiveCommand.Create(competitionService.Refresh);
 
             AddNew = ReactiveCommand.Create(() =>
             {
@@ -92,9 +88,7 @@ namespace ViewModels.Modules.Competitions
 
             this.ValidationRule(viewModel => viewModel.Competitions, allValid, "A Competition info is in an invalid state");
 
-            _cleanup = new CompositeDisposable(competitionsListDisposable, onCompetitionsListChange, onCompetitionAdded, transform.Connect(), allValid.Connect(), anySelected.Connect());
-
-            Refresh.Execute().Subscribe();
+            _cleanup = new CompositeDisposable(competitionsListDisposable, onCompetitionsListChange, onCompetitionAdded, transform.Connect(), allValid.Connect());
         }
 
         public Interaction<CompetitionProxy, bool> ConfirmDeleteDialog { get; }
