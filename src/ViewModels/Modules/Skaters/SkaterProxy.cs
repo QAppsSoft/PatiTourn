@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Reactive.Linq;
 using DataModel;
 using DataModel.Enums;
@@ -72,7 +73,7 @@ namespace ViewModels.Modules.Skaters
                 "You must specify a valid lastname");
 
             this.ValidationRule(viewModel => viewModel.LastNames,
-                name => name!.Contains(" "),
+                name => name!.Contains(" ", StringComparison.InvariantCulture),
                 "You must specify both lastname");
 
             // Identification Number
@@ -123,9 +124,9 @@ namespace ViewModels.Modules.Skaters
 
         private static DateTime GetBirthDate(string value)
         {
-            var year = int.Parse(value.Substring(0, 2));
-            var month = int.Parse(value.Substring(2, 2));
-            var day = int.Parse(value.Substring(4, 2));
+            var year = int.Parse(value.Substring(0, 2), CultureInfo.InvariantCulture);
+            var month = int.Parse(value.Substring(2, 2), CultureInfo.InvariantCulture);
+            var day = int.Parse(value.Substring(4, 2), CultureInfo.InvariantCulture);
 
             return new DateTime(year, month, day);
         }
