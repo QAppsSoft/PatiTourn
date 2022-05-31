@@ -63,8 +63,6 @@ namespace ViewModels.Modules.Skaters
             this.ValidationRule(viewModel => viewModel.Skaters, allValid, "A Skater info is in an invalid state");
 
             _cleanup = new CompositeDisposable(skatersListDisposable, selectLast, transform.Connect(), allValid.Connect(), anySelected.Connect());
-
-            Refresh.Execute().Subscribe();
         }
 
         public ReactiveCommand<Unit, Unit> AddNew { get; }

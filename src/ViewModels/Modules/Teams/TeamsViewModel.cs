@@ -63,8 +63,6 @@ namespace ViewModels.Modules.Teams
             this.ValidationRule(viewModel => viewModel.Teams, allValid, "A Team info is in an invalid state");
 
             _cleanup = new CompositeDisposable(teamsListDisposable, selectLast, transform.Connect(), allValid.Connect(), anySelected.Connect());
-
-            Refresh.Execute().Subscribe();
         }
 
         public ReactiveCommand<Unit, int> Save { get; }
