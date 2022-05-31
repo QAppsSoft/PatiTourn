@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.Mixins;
 using Avalonia.Threading;
+using Common.Extensions;
 using ReactiveUI;
 using ViewModels;
 using FluentAvalonia.UI.Controls;
@@ -41,7 +42,7 @@ namespace PatiTournApp.Views
             });
 
             this.WhenAnyValue(x => x.ViewModel)
-                .Select(_ => Unit.Default)
+                .ToUnit()
                 .InvokeCommand(this, x => x.ViewModel.CompetitionsViewModel.Refresh);
         }
 
