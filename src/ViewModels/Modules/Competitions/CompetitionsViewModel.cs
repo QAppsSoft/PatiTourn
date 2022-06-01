@@ -50,15 +50,7 @@ namespace ViewModels.Modules.Competitions
 
             Competitions = competitions;
 
-            var onCompetitionsListChange = transform.ActOnEveryObject(
-                _ => { },
-                competitionProxy =>
-                {
-                    if (SelectedCompetitionProxy == competitionProxy)
-                    {
-                        SelectedCompetitionProxy = null;
-                    }
-                });
+            var onCompetitionsListChange = transform.ActOnEveryObject(_ => { }, OnRemove);
 
             Delete = ReactiveCommand.CreateFromTask<CompetitionProxy>(DeleteCompetitionAsync);
 
@@ -89,6 +81,14 @@ namespace ViewModels.Modules.Competitions
             this.ValidationRule(viewModel => viewModel.Competitions, allValid, "A Competition info is in an invalid state");
 
             _cleanup = new CompositeDisposable(competitionsListDisposable, onCompetitionsListChange, onCompetitionAdded, transform.Connect(), allValid.Connect());
+        }
+
+        private void OnRemove(CompetitionProxy competitionProxy)
+        {
+            if (SelectedCompetitionProxy == competitionProxy)
+            {
+                SelectedCompetitionProxy = null;
+            }
         }
 
         public Interaction<CompetitionProxy, bool> ConfirmDeleteDialog { get; }
