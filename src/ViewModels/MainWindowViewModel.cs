@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Common;
 using DataModel;
 using DynamicData.Binding;
+using DynamicData.Kernel;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ViewModels.Modules.Competitions;
@@ -40,18 +41,19 @@ namespace ViewModels
 
         private void InitializeProperties(Func<Competition, TeamsViewModel> teamsFactory, Func<Competition, SkatersViewModel> skatersFactory)
         {
-            this.WhenValueChanged(viewModel => viewModel.CompetitionsViewModel.SelectedCompetitionProxy)
-                .Select(competitionProxy =>
+            this.WhenValueChanged(viewModel => viewModel.CompetitionsViewModel.SelectedCompetitionProxy, true, () => null)
+                .Select(proxy => proxy == null ? Optional.None<CompetitionProxy>() : Optional.Some(proxy))
+                .Select(optional =>
                 {
-                    if (competitionProxy == null)
+                    if (!optional.HasValue)
                     {
                         return null;
                     }
 
                     return new CompetitionExtendedProxy(
-                        teamsFactory(competitionProxy),
-                        skatersFactory(competitionProxy),
-                        competitionProxy);
+                        teamsFactory(optional.Value),
+                        skatersFactory(optional.Value),
+                        optional.Value);
                 })
                 .ToPropertyEx(this, x => x.CompetitionExtended);
 
