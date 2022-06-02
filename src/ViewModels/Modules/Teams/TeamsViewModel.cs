@@ -40,9 +40,6 @@ namespace ViewModels.Modules.Teams
 
             Teams = teams;
 
-            var onTeamsListChanged = transform.ObserveOn(schedulerProvider.Dispatcher)
-                .ActOnEveryObject(_ => { }, OnRemove);
-
             var anySelected = this.WhenAnyValue(vm => vm.SelectedTeamProxy)
                 .Select(teamProxy => teamProxy != null)
                 .Publish();
@@ -72,7 +69,7 @@ namespace ViewModels.Modules.Teams
 
             this.ValidationRule(viewModel => viewModel.Teams, allValid, "A Team info is in an invalid state");
 
-            _cleanup = new CompositeDisposable(teamsListDisposable, onTeamsListChanged, transform.Connect(), allValid.Connect(), anySelected.Connect());
+            _cleanup = new CompositeDisposable(teamsListDisposable, transform.Connect(), allValid.Connect(), anySelected.Connect());
         }
 
         private async Task AddTeamAsync()
@@ -104,14 +101,6 @@ namespace ViewModels.Modules.Teams
         {
             await EditDialog.Handle(teamProxy);
             await _teamsService.SaveAsync().ConfigureAwait(false);
-        }
-
-        private void OnRemove(TeamProxy teamProxy)
-        {
-            if (SelectedTeamProxy == teamProxy)
-            {
-                SelectedTeamProxy = null;
-            }
         }
 
         public Interaction<TeamProxy, Unit> EditDialog { get; }
