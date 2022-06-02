@@ -33,7 +33,7 @@
     <DockPanel LastChildFill="True">
         <Grid ColumnDefinitions="* Auto" DockPanel.Dock="Top">
             <TextBox x:Name="FilterTextBox" Grid.Column="0" Watermark="Filter competitions list"
-                     Classes="FilterTextBox" />
+                     Classes="FilterTextBox" Text="{Binding Filter}" />
             <Button Grid.Column="1" 
                     Margin="8 0 0 0"
                     Content="&#xE710;" 
