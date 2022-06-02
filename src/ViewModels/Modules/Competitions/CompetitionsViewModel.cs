@@ -37,8 +37,8 @@ namespace ViewModels.Modules.Competitions
                 .Transform(competition => new CompetitionProxy(competition))
                 .Publish();
 
-            var filterBuilder = Observable
-                .FromEvent<string>(handler => _applyFilter += handler, handler => _applyFilter -= handler)
+            var filterBuilder = this.WhenAnyValue(x => x.Filter)
+                .Throttle(TimeSpan.FromMilliseconds(500), schedulerProvider.TaskPool)
                 .StartWith(string.Empty)
                 .Select(BuildFilter);
 
