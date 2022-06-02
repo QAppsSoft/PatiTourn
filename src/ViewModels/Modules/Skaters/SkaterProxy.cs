@@ -10,17 +10,17 @@ using ViewModels.Extensions;
 
 namespace ViewModels.Modules.Skaters
 {
-    public class SkaterProxy : ValidatableViewModelBase
+    public sealed class SkaterProxy : ValidatableViewModelBase, IEntityProxy<Skater>
     {
         public SkaterProxy(Skater skater)
         {
-            Skater = skater ?? throw new ArgumentNullException(nameof(skater));
+            Entity = skater ?? throw new ArgumentNullException(nameof(skater));
 
             InitializeProperties(skater);
 
             InitializeValidations();
 
-            UpdateSkaterOnValueChange();
+            UpdateOnValueChange();
 
             this.WhenAnyValue(vm => vm.IdentificationNumber)
                 .Where(value => value.Length == 11)
@@ -32,8 +32,7 @@ namespace ViewModels.Modules.Skaters
                 .ToPropertyEx(this, vm => vm.Age);
         }
 
-        public Skater Skater { get; }
-
+        public Skater Entity { get; }
         [Reactive] public int Number { get; set; }
 
         [Reactive] public string Name { get; set; } = null!;
@@ -102,7 +101,7 @@ namespace ViewModels.Modules.Skaters
                 "Team is required");
         }
 
-        private void UpdateSkaterOnValueChange()
+        private void UpdateOnValueChange()
         {
             this.WhenAnyValue(vm => vm.Name,
                     vm => vm.LastNames,
@@ -113,12 +112,12 @@ namespace ViewModels.Modules.Skaters
                 .Subscribe(value =>
                 {
                     var (name, lastname, identification, sex, number, team) = value;
-                    Skater.Name = name;
-                    Skater.LastNames = lastname;
-                    Skater.IdentificationNumber = identification;
-                    Skater.Sex = sex ?? DataModel.Enums.Sex.Male;
-                    Skater.Number = number;
-                    Skater.Team = team;
+                    Entity.Name = name;
+                    Entity.LastNames = lastname;
+                    Entity.IdentificationNumber = identification;
+                    Entity.Sex = sex ?? DataModel.Enums.Sex.Male;
+                    Entity.Number = number;
+                    Entity.Team = team;
                 });
         }
 
@@ -133,7 +132,7 @@ namespace ViewModels.Modules.Skaters
 
         public static implicit operator Skater(SkaterProxy skaterProxy)
         {
-            return skaterProxy.Skater;
+            return skaterProxy.Entity;
         }
 
 
