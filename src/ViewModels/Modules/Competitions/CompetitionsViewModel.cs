@@ -21,8 +21,6 @@ namespace ViewModels.Modules.Competitions
         private readonly IEntityService<Competition> _competitionService;
         private readonly IDisposable _cleanup;
 
-        private Action<string> _applyFilter = _ => { };
-
         public CompetitionsViewModel(IEntityService<Competition> competitionService, ISchedulerProvider schedulerProvider)
         {
             _competitionService = competitionService ?? throw new ArgumentNullException(nameof(competitionService));
@@ -106,11 +104,6 @@ namespace ViewModels.Modules.Competitions
         public ReadOnlyObservableCollection<CompetitionProxy> Competitions { get; }
 
         [Reactive] public string Filter { get; set; } = string.Empty;
-
-        public void ApplyFilter(string filter)
-        {
-            _applyFilter(filter);
-        }
 
         private async Task DeleteCompetitionAsync(CompetitionProxy competition)
         {
