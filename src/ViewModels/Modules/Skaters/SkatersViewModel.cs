@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Common;
 using DataModel;
 using Domain.Services.Interfaces;
@@ -17,10 +18,15 @@ namespace ViewModels.Modules.Skaters
 {
     public class SkatersViewModel : ValidatableViewModelBase, IDisposable
     {
+        private readonly IEntityService<Skater> _skatersService;
+        private readonly Competition _competition;
         private readonly IDisposable _cleanup;
 
         public SkatersViewModel(IEntityService<Skater> skatersService, ISchedulerProvider schedulerProvider, Competition competition)
         {
+            _skatersService = skatersService ?? throw new ArgumentNullException(nameof(skatersService));
+            _competition = competition ?? throw new ArgumentNullException(nameof(competition));
+
             var transform = skatersService.List.Connect()
                 .Transform(skater => new SkaterProxy(skater))
                 .Publish();
@@ -33,23 +39,23 @@ namespace ViewModels.Modules.Skaters
 
             Skaters = skaters;
 
-            var selectLast = transform.ActOnEveryObject(skaterProxy => SelectedSkaterProxy = skaterProxy, _ => { });
+            EditDialog = new Interaction<SkaterProxy, Unit>(schedulerProvider.Dispatcher);
+
+            ConfirmDeleteDialog = new Interaction<SkaterProxy, bool>(schedulerProvider.Dispatcher);
+
+            AddDialog = new Interaction<SkaterProxy, bool>(schedulerProvider.Dispatcher);
 
             var anySelected = this.WhenAnyValue(vm => vm.SelectedSkaterProxy)
                 .Select(skaterProxy => skaterProxy != null)
                 .Publish();
 
-            Delete = ReactiveCommand.Create<Skater>(skatersService.Remove, anySelected);
+            Delete = ReactiveCommand.CreateFromTask<SkaterProxy>(DeleteSkaterAsync, anySelected);
 
             Refresh = ReactiveCommand.Create(() => skatersService.Refresh(skater => skater.CompetitionId == competition.Id));
 
-            AddNew = ReactiveCommand.Create(() =>
-            {
-                var skater = skatersService.Create();
-                skater.Competition = competition;
+            AddNew = ReactiveCommand.CreateFromTask(AddSkaterAsync);
 
-                skatersService.Add(skater);
-            });
+            Edit = ReactiveCommand.CreateFromTask<SkaterProxy>(EditSkaterAsync, anySelected);
 
             var allValid = transform.AutoRefreshOnObservable(skaterProxy => skaterProxy.IsValid())
                 .Filter(skaterProxy => !skaterProxy.ValidationContext.IsValid)
@@ -62,25 +68,64 @@ namespace ViewModels.Modules.Skaters
 
             this.ValidationRule(viewModel => viewModel.Skaters, allValid, "A Skater info is in an invalid state");
 
-            _cleanup = new CompositeDisposable(skatersListDisposable, selectLast, transform.Connect(), allValid.Connect(), anySelected.Connect());
+            _cleanup = new CompositeDisposable(skatersListDisposable, transform.Connect(), allValid.Connect(), anySelected.Connect());
         }
+
+        private async Task EditSkaterAsync(SkaterProxy skaterProxy)
+        {
+            await EditDialog.Handle(skaterProxy);
+            await _skatersService.SaveAsync().ConfigureAwait(false);
+        }
+
+        private async Task DeleteSkaterAsync(SkaterProxy skaterProxy)
+        {
+            var canDelete = await ConfirmDeleteDialog.Handle(skaterProxy);
+
+            if (canDelete)
+            {
+                _skatersService.Remove(skaterProxy);
+                await _skatersService.SaveAsync().ConfigureAwait(false);
+            }
+        }
+
+        private async Task AddSkaterAsync()
+        {
+            var skater = _skatersService.Create();
+            skater.CompetitionId = _competition.Id;
+
+            var result = await AddDialog.Handle(new SkaterProxy(skater));
+            
+            if (result)
+            {
+                _skatersService.Add(skater);
+            }
+        }
+
+        public Interaction<SkaterProxy, Unit> EditDialog { get; }
+
+        public Interaction<SkaterProxy, bool> ConfirmDeleteDialog { get; }
+
+        public Interaction<SkaterProxy, bool> AddDialog { get; }
 
         public ReactiveCommand<Unit, Unit> AddNew { get; }
 
-        public ReadOnlyObservableCollection<SkaterProxy> Skaters { get; }
+        public ReactiveCommand<SkaterProxy, Unit> Edit { get; }
 
-        [Reactive] public SkaterProxy? SelectedSkaterProxy { get; set; }
-
-        public ReactiveCommand<Skater, Unit> Delete { get; }
+        public ReactiveCommand<SkaterProxy, Unit> Delete { get; }
 
         public ReactiveCommand<Unit, Unit> Refresh { get; }
 
         public ReactiveCommand<Unit, int> Save { get; }
 
+        public ReadOnlyObservableCollection<SkaterProxy> Skaters { get; }
+
+        [Reactive] public SkaterProxy? SelectedSkaterProxy { get; set; }
+
         public void Dispose()
         {
             _cleanup.Dispose();
             AddNew.Dispose();
+            Edit.Dispose();
             Delete.Dispose();
             Refresh.Dispose();
         }
