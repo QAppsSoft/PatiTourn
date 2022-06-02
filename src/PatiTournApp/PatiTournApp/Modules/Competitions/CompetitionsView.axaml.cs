@@ -2,7 +2,6 @@ using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Avalonia.Controls.Mixins;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using Avalonia.Threading;
@@ -20,23 +19,45 @@ namespace PatiTournApp.Modules.Competitions
         {
             InitializeComponent();
 
-            this.WhenActivated(disposable =>
-            {
-                ViewModel!
-                    .ConfirmDeleteDialog
-                    .RegisterHandler(DoShowConfirmDeleteDialogAsync)
-                    .DisposeWith(disposable);
+            this.BindInteraction(ViewModel,
+                vm => vm.ConfirmDeleteDialog,
+                DoShowConfirmDeleteDialogAsync)
+                .Dispose();
 
-                ViewModel!
-                    .EditDialog
-                    .RegisterHandler(DoShowEditDialogAsync)
-                    .DisposeWith(disposable);
-            });
+            this.BindInteraction(ViewModel,
+                vm => vm.EditDialog,
+                DoShowEditDialogAsync);
+
+            this.BindInteraction(ViewModel,
+                vm => vm.AddDialog,
+                DoAddDialogAsync);
         }
 
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        private static async Task DoAddDialogAsync(InteractionContext<CompetitionProxy, bool> interaction)
+        {
+            var competitionProxy = interaction.Input;
+
+            var dialog = new ContentDialog
+            {
+                Content = new CompetitionProxyView(),
+                DataContext = competitionProxy,
+                Title = "Add competition",
+                PrimaryButtonText = "Ok",
+                DefaultButton = ContentDialogButton.Primary,
+            };
+
+            using var _ = competitionProxy.IsValid()
+                .ObserveOn(AvaloniaScheduler.Instance)
+                .Subscribe(valid => dialog.IsPrimaryButtonEnabled = valid);
+
+            var result = await dialog.ShowAsync().ConfigureAwait(false);
+
+            interaction.SetOutput(result == ContentDialogResult.Primary);
         }
 
         private static async Task DoShowConfirmDeleteDialogAsync(InteractionContext<CompetitionProxy, bool> interaction)

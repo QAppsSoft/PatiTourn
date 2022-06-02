@@ -27,20 +27,10 @@ namespace PatiTournApp.Views
             this.GetObservable(DataContextProperty).Subscribe(OnDataContextChanged);
             this.GetObservable(ViewModelProperty).Subscribe(OnViewModelChanged);
 
-            this.WhenActivated(disposable =>
-            {
-                ViewModel!
-                    .CompetitionsDialog
-                    .RegisterHandler(DoShowCompetitionsDialogAsync)
-                    .DisposeWith(disposable);
-
-                ViewModel!
-                    .CompetitionsViewModel
-                    .EditDialog
-                    .RegisterHandler(DoShowEditDialogAsync)
-                    .DisposeWith(disposable);
-            });
-
+            this.BindInteraction(ViewModel,
+                vm => vm.CompetitionsDialog,
+                DoShowCompetitionsDialogAsync);
+            
             this.WhenAnyValue(x => x.ViewModel)
                 .ToUnit()
                 .InvokeCommand(this, x => x.ViewModel.CompetitionsViewModel.Refresh);
@@ -67,27 +57,6 @@ namespace PatiTournApp.Views
             await dialog.ShowAsync().ConfigureAwait(false);
 
             interaction.SetOutput(competitionsViewModel.SelectedCompetitionProxy!); // Ignored because the dialog cant be closed if a CompetitionProxy is not selected
-        }
-
-        private static async Task DoShowEditDialogAsync(InteractionContext<CompetitionProxy, Unit> interaction)
-        {
-            var competitionProxy = interaction.Input;
-
-            var dialog = new ContentDialog
-            {
-                Content = new CompetitionProxyView(),
-                DataContext = competitionProxy,
-                Title = "Edit competition",
-                PrimaryButtonText = "Ok"
-            };
-
-            using var _ = competitionProxy.IsValid()
-                .ObserveOn(AvaloniaScheduler.Instance)
-                .Subscribe(valid => dialog.IsPrimaryButtonEnabled = valid);
-
-            await dialog.ShowAsync().ConfigureAwait(false);
-
-            interaction.SetOutput(Unit.Default);
         }
 
         #region IViewFor<MainWindowViewModel> implementation

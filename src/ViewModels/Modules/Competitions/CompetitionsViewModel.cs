@@ -5,7 +5,6 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using AsyncAwaitBestPractices;
 using Common;
 using DataModel;
 using Domain.Services.Interfaces;
@@ -32,6 +31,8 @@ namespace ViewModels.Modules.Competitions
 
             EditDialog = new Interaction<CompetitionProxy, Unit>(schedulerProvider.Dispatcher);
 
+            AddDialog = new Interaction<CompetitionProxy, bool>(schedulerProvider.Dispatcher);
+
             var transform = competitionService.List.Connect()
                 .Transform(competition => new CompetitionProxy(competition))
                 .Publish();
@@ -57,16 +58,7 @@ namespace ViewModels.Modules.Competitions
 
             Refresh = ReactiveCommand.Create(competitionService.Refresh);
 
-            AddNew = ReactiveCommand.Create(() =>
-            {
-                var competition = competitionService.Create();
-                competitionService.Add(competition);
-            });
-
-            var onCompetitionAdded = transform.SkipUntil(Refresh) // Wait until existing data is loaded
-                .ActOnEveryObject(
-                    competitionProxy => EditNewCompetitionAsync(competitionProxy).SafeFireAndForget(),
-                    _ => { });
+            AddNew = ReactiveCommand.CreateFromTask(AddCompetitionAsync);
 
             Edit = ReactiveCommand.CreateFromTask<CompetitionProxy>(EditCompetitionAsync);
 
@@ -81,7 +73,19 @@ namespace ViewModels.Modules.Competitions
 
             this.ValidationRule(viewModel => viewModel.Competitions, allValid, "A Competition info is in an invalid state");
 
-            _cleanup = new CompositeDisposable(competitionsListDisposable, onCompetitionsListChange, onCompetitionAdded, transform.Connect(), allValid.Connect());
+            _cleanup = new CompositeDisposable(competitionsListDisposable, onCompetitionsListChange, transform.Connect(), allValid.Connect());
+        }
+
+        private async Task AddCompetitionAsync()
+        {
+            var competition = _competitionService.Create();
+
+            var result = await AddDialog.Handle(new CompetitionProxy(competition));
+
+            if (result)
+            {
+                _competitionService.Add(competition);
+            }
         }
 
         private void OnRemove(CompetitionProxy competitionProxy)
@@ -95,6 +99,8 @@ namespace ViewModels.Modules.Competitions
         public Interaction<CompetitionProxy, bool> ConfirmDeleteDialog { get; }
 
         public Interaction<CompetitionProxy, Unit> EditDialog { get; }
+
+        public Interaction<CompetitionProxy, bool> AddDialog { get; }
 
         public ReactiveCommand<Unit, int> Save { get; }
 
@@ -132,12 +138,6 @@ namespace ViewModels.Modules.Competitions
         {
             await EditDialog.Handle(competition);
             await _competitionService.SaveAsync().ConfigureAwait(false);
-        }
-
-        private async Task EditNewCompetitionAsync(CompetitionProxy competitionProxy)
-        {
-            await EditCompetitionAsync(competitionProxy).ConfigureAwait(true);
-            SelectedCompetitionProxy = competitionProxy;
         }
 
         private static Func<CompetitionProxy, bool> BuildFilter(string filter)

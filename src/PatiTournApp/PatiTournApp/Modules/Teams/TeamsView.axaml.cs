@@ -2,7 +2,6 @@ using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Avalonia.Controls.Mixins;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using Avalonia.Threading;
@@ -29,9 +28,35 @@ namespace PatiTournApp.Modules.Teams
                 vm => vm.EditDialog,
                 DoShowEditDialogAsync);
 
+            this.BindInteraction(ViewModel,
+                vm => vm.AddDialog,
+                DoAddDialogAsync);
+
             this.WhenAnyValue(x => x.ViewModel)
                 .ToUnit()
                 .InvokeCommand(this, x => x.ViewModel.Refresh);
+        }
+
+        private static async Task DoAddDialogAsync(InteractionContext<TeamProxy, bool> interaction)
+        {
+            var teamProxy = interaction.Input;
+
+            var dialog = new ContentDialog
+            {
+                Content = new TeamProxyView(),
+                DataContext = teamProxy,
+                Title = "Add team",
+                PrimaryButtonText = "Ok",
+                DefaultButton = ContentDialogButton.Primary,
+            };
+
+            using var _ = teamProxy.IsValid()
+                .ObserveOn(AvaloniaScheduler.Instance)
+                .Subscribe(valid => dialog.IsPrimaryButtonEnabled = valid);
+
+            var result = await dialog.ShowAsync().ConfigureAwait(false);
+
+            interaction.SetOutput(result == ContentDialogResult.Primary);
         }
 
         private void InitializeComponent()
