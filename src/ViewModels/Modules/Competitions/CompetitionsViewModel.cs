@@ -50,7 +50,8 @@ namespace ViewModels.Modules.Competitions
 
             Competitions = competitions;
 
-            var onCompetitionsListChange = transform.ActOnEveryObject(_ => { }, OnRemove);
+            var onCompetitionsListChange = transform.ObserveOn(schedulerProvider.Dispatcher)
+                .ActOnEveryObject(_ => { }, OnRemove);
 
             Delete = ReactiveCommand.CreateFromTask<CompetitionProxy>(DeleteCompetitionAsync);
 
@@ -62,7 +63,7 @@ namespace ViewModels.Modules.Competitions
                 competitionService.Add(competition);
             });
 
-            var onCompetitionAdded = transform.SkipUntil(Observable.Timer(TimeSpan.FromSeconds(2))) // Wait until existing data is loaded
+            var onCompetitionAdded = transform.SkipUntil(Refresh) // Wait until existing data is loaded
                 .ActOnEveryObject(
                     competitionProxy => EditNewCompetitionAsync(competitionProxy).SafeFireAndForget(),
                     _ => { });
@@ -135,7 +136,7 @@ namespace ViewModels.Modules.Competitions
 
         private async Task EditNewCompetitionAsync(CompetitionProxy competitionProxy)
         {
-            await EditCompetitionAsync(competitionProxy).ConfigureAwait(false);
+            await EditCompetitionAsync(competitionProxy).ConfigureAwait(true);
             SelectedCompetitionProxy = competitionProxy;
         }
 

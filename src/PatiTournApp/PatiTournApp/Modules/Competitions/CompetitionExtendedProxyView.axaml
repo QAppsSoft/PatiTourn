@@ -1,0 +1,22 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:competitions="clr-namespace:ViewModels.Modules.Competitions;assembly=ViewModels"
+             xmlns:teams="clr-namespace:ViewModels.Modules.Teams;assembly=ViewModels"
+             xmlns:views="clr-namespace:PatiTournApp.Modules.Teams"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="competitions:CompetitionExtendedProxy"
+             x:CompileBindings="True"
+             x:Class="PatiTournApp.Modules.Competitions.CompetitionExtendedProxyView">
+    <UserControl.DataTemplates>
+        <DataTemplate DataType="teams:TeamsViewModel" x:DataType="teams:TeamsViewModel">
+            <views:TeamsView />
+        </DataTemplate>
+    </UserControl.DataTemplates>
+    <TabControl>
+        <TabItem Header="Teams">
+            <ContentControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="{Binding TeamsViewModel}" />
+        </TabItem>
+    </TabControl>
+</UserControl>
