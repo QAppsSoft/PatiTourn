@@ -16,7 +16,7 @@ using ReactiveUI.Validation.Extensions;
 
 namespace ViewModels.Modules.Competitions
 {
-    public class CompetitionsViewModel : ValidatableViewModelBase, IActivatableViewModel, IDisposable
+    public class CompetitionsViewModel : ValidatableViewModelBase, IDisposable
     {
         private readonly IEntityService<Competition> _competitionService;
         private readonly IDisposable _cleanup;
@@ -158,7 +158,5 @@ namespace ViewModels.Modules.Competitions
         {
             _cleanup.Dispose();
         }
-
-        public ViewModelActivator Activator { get; } = new();
     }
 }
