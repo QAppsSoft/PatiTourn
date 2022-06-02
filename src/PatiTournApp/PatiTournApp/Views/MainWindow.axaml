@@ -41,27 +41,13 @@
 
         <Panel>
             <Border IsVisible="{Binding !CompetitionHasValue}">
-                <Grid ColumnDefinitions="* * * * *" RowDefinitions="* * *">
-                    <Button Grid.Column="1" Grid.Row="1"
-                            HorizontalAlignment="Center"
-                            Content="&#xE948;"
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            FontSize="32"
-                            x:DataType="viewModels:MainWindowViewModel"
-                            Command="{Binding CompetitionsViewModel.AddNew}"
-                            Cursor="Hand" />
-                    <TextBlock Grid.Column="1" Grid.Row="2" Text="Add" HorizontalAlignment="Center" />
-
-                    <Button Grid.Column="3" Grid.Row="1"
-                            HorizontalAlignment="Center"
-                            Content="&#xE721;"
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            FontSize="32"
-                            x:DataType="viewModels:MainWindowViewModel"
-                            Command="{Binding SearchCompetitions}"
-                            Cursor="Hand" />
-                    <TextBlock Grid.Column="3" Grid.Row="2" Text="Search" HorizontalAlignment="Center" />
-                </Grid>
+                <Button HorizontalAlignment="Center"
+                        Content="&#xE721;"
+                        FontFamily="{StaticResource SymbolThemeFontFamily}"
+                        FontSize="32"
+                        x:DataType="viewModels:MainWindowViewModel"
+                        Command="{Binding SearchCompetitions}"
+                        Cursor="Hand" />
             </Border>
 
             <ContentControl IsVisible="{Binding  CompetitionHasValue}"
