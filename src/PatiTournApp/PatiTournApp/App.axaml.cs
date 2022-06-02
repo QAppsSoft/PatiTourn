@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Common;
+using DataModel;
 using Domain;
 using Domain.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,8 @@ using PatiTournApp.Infrastructure;
 using PatiTournApp.Views;
 using ViewModels;
 using ViewModels.Interfaces;
+using ViewModels.Modules.Skaters;
+using ViewModels.Modules.Teams;
 
 namespace PatiTournApp
 {
@@ -81,6 +84,25 @@ namespace PatiTournApp
 
             RegisterEntities(serviceCollection);
             
+            RegisterViewModels(serviceCollection);
+
+            RegisterParameterizedViewModels(serviceCollection);
+
+            return serviceCollection;
+        }
+
+        private static void RegisterParameterizedViewModels(IServiceCollection serviceCollection)
+        {
+            // Register view-models factories with dynamic parameter
+            serviceCollection.AddTransient(provider => new Func<Competition, SkatersViewModel>(competition =>
+                ActivatorUtilities.CreateInstance<SkatersViewModel>(provider, competition)));
+
+            serviceCollection.AddTransient(provider => new Func<Competition, TeamsViewModel>(competition =>
+                ActivatorUtilities.CreateInstance<TeamsViewModel>(provider, competition)));
+        }
+
+        private static void RegisterViewModels(IServiceCollection serviceCollection)
+        {
             // Auto-register all view-models
             serviceCollection.Scan(scan =>
             {
@@ -89,13 +111,11 @@ namespace PatiTournApp
                     .AsSelfWithInterfaces()
                     .WithSingletonLifetime();
             });
-
-            return serviceCollection;
         }
 
-        private static void RegisterEntities(IServiceCollection services)
+        private static void RegisterEntities(IServiceCollection serviceCollection)
         {
-            services.Scan(scan =>
+            serviceCollection.Scan(scan =>
             {
                 scan.FromAssemblyOf<IService>()
                     .AddClasses(classes => classes.AssignableTo(typeof(IEntityService<>)))
