@@ -6,20 +6,20 @@ using ReactiveUI.Validation.Extensions;
 
 namespace ViewModels.Modules.Competitions
 {
-    public class CompetitionProxy : ValidatableViewModelBase
+    public sealed class CompetitionProxy : ValidatableViewModelBase, IEntityProxy<Competition>
     {
         public CompetitionProxy(Competition competition)
         {
-            Competition = competition ?? throw new ArgumentNullException(nameof(competition));
+            Entity = competition ?? throw new ArgumentNullException(nameof(competition));
 
             InitializeProperties(competition);
 
             InitializeValidations();
 
-            UpdateSkaterOnValueChange();
+            UpdateOnValueChange();
         }
 
-        public Competition Competition { get; }
+        public Competition Entity { get; }
 
         [Reactive] public string Name { get; set; } = null!;
 
@@ -62,7 +62,7 @@ namespace ViewModels.Modules.Competitions
                 "Competition end date must after start date");
         }
 
-        private void UpdateSkaterOnValueChange()
+        private void UpdateOnValueChange()
         {
             this.WhenAnyValue(vm => vm.Name,
                     vm => vm.Category,
@@ -71,19 +71,18 @@ namespace ViewModels.Modules.Competitions
                 .Subscribe(value =>
                 {
                     var (name, category, startDate, endDate) = value;
-                    Competition.Name = name;
-                    Competition.Category = category;
-                    Competition.StartDate = startDate;
-                    Competition.EndDate = endDate;
+                    Entity.Name = name;
+                    Entity.Category = category;
+                    Entity.StartDate = startDate;
+                    Entity.EndDate = endDate;
                 });
         }
 
         public static implicit operator Competition(CompetitionProxy competitionProxy)
         {
-            return competitionProxy.Competition;
+            return competitionProxy.Entity;
         }
-
-
+        
         public static explicit operator CompetitionProxy(Competition competition)
         {
             return new CompetitionProxy(competition);

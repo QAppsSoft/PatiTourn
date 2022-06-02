@@ -6,17 +6,16 @@ using ReactiveUI.Validation.Extensions;
 
 namespace ViewModels.Modules.Teams
 {
-    public class TeamProxy : ValidatableViewModelBase
+    public sealed class TeamProxy : ValidatableViewModelBase, IEntityProxy<Team>
     {
         public TeamProxy(Team team)
         {
-            Team = team ?? throw new ArgumentNullException(nameof(team));
-
+            Entity = team ?? throw new ArgumentNullException(nameof(team));
             InitializeProperties(team);
 
             InitializeValidations();
 
-            UpdateSkaterOnValueChange();
+            UpdateOnValueChange();
         }
 
         private void InitializeValidations()
@@ -32,14 +31,14 @@ namespace ViewModels.Modules.Teams
                 "You must specify a valid description");
         }
 
-        private void UpdateSkaterOnValueChange()
+        private void UpdateOnValueChange()
         {
             this.WhenAnyValue(vm => vm.Name, vm => vm.Description)
                 .Subscribe(value =>
                 {
                     var (name, description) = value;
-                    Team.Name = name;
-                    Team.Description = description;
+                    Entity.Name = name;
+                    Entity.Description = description;
                 });
         }
 
@@ -49,7 +48,7 @@ namespace ViewModels.Modules.Teams
             Description = team.Description;
         }
 
-        public Team Team { get; }
+        public Team Entity { get; }
 
         [Reactive] public string Name { get; set; } = null!;
 
@@ -57,7 +56,7 @@ namespace ViewModels.Modules.Teams
 
         public static implicit operator Team(TeamProxy teamProxy)
         {
-            return teamProxy.Team;
+            return teamProxy.Entity;
         }
 
         public static explicit operator TeamProxy(Team team)
