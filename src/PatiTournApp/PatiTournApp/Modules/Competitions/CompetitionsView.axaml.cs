@@ -21,8 +21,7 @@ namespace PatiTournApp.Modules.Competitions
 
             this.BindInteraction(ViewModel,
                 vm => vm.ConfirmDeleteDialog,
-                DoShowConfirmDeleteDialogAsync)
-                .Dispose();
+                DoShowConfirmDeleteDialogAsync);
 
             this.BindInteraction(ViewModel,
                 vm => vm.EditDialog,
