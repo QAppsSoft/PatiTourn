@@ -14,7 +14,6 @@
                     Content="&#xE710;"
                     FontFamily="{StaticResource SymbolThemeFontFamily}"
                     FontSize="32"
-                    x:DataType="teams:TeamsViewModel"
                     Command="{Binding AddNew}"
                     Cursor="Hand" />
 
@@ -23,7 +22,6 @@
                     Content="&#xE70F;"
                     FontFamily="{StaticResource SymbolThemeFontFamily}"
                     FontSize="32"
-                    x:DataType="teams:TeamsViewModel"
                     Command="{Binding Edit}"
                     CommandParameter="{Binding SelectedTeamProxy}"
                     Cursor="Hand" />
@@ -34,7 +32,6 @@
                     Content="&#xE74D;"
                     FontFamily="{StaticResource SymbolThemeFontFamily}"
                     FontSize="32"
-                    x:DataType="teams:TeamsViewModel"
                     Command="{Binding Delete}"
                     CommandParameter="{Binding SelectedTeamProxy}"
                     Cursor="Hand" />
