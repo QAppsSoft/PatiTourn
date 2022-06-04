@@ -4,7 +4,7 @@ using ReactiveUI;
 
 namespace ViewModels.Interfaces
 {
-    public interface IEntitiesProxyContainerViewModel<TProxy>
+    public interface IEntitiesProxyContainer<TProxy>
     {
         ReactiveCommand<Unit, int> Save { get; }
 
@@ -16,8 +16,8 @@ namespace ViewModels.Interfaces
 
         ReactiveCommand<TProxy, Unit> Edit { get; }
 
-        TProxy? SelectedItem { get; set; }
+        TProxy? SelectedProxy { get; set; }
 
-        public ReadOnlyObservableCollection<TProxy> Items { get; }
+        public ReadOnlyObservableCollection<TProxy> ProxyItems { get; }
     }
 }

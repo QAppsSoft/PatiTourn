@@ -17,7 +17,7 @@ using ViewModels.Interfaces;
 
 namespace ViewModels.Modules.Skaters
 {
-    public class SkatersViewModel : ValidatableViewModelBase, IEntitiesProxyContainerViewModel<SkaterProxy>, IDisposable
+    public class SkatersViewModel : ValidatableViewModelBase, IEntitiesProxyContainer<SkaterProxy>, IDisposable
     {
         private readonly IEntityService<Skater> _skatersService;
         private readonly Competition _competition;
