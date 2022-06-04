@@ -12,10 +12,11 @@ using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
+using ViewModels.Interfaces;
 
 namespace ViewModels.Modules.Teams
 {
-    public class TeamsViewModel : ValidatableViewModelBase, IDisposable
+    public class TeamsViewModel : ValidatableViewModelBase, IEntitiesProxyContainerViewModel<TeamProxy>, IDisposable
     {
         private readonly IEntityService<Team> _teamsService;
         private readonly Competition _competition;
@@ -38,9 +39,9 @@ namespace ViewModels.Modules.Teams
                 .Bind(out var teams)
                 .Subscribe();
 
-            Teams = teams;
+            ProxyItems = teams;
 
-            var anySelected = this.WhenAnyValue(vm => vm.SelectedTeamProxy)
+            var anySelected = this.WhenAnyValue(vm => vm.SelectedProxy)
                 .Select(teamProxy => teamProxy != null)
                 .Publish();
 
@@ -67,7 +68,7 @@ namespace ViewModels.Modules.Teams
 
             Save = ReactiveCommand.CreateFromTask(teamsService.SaveAsync, allValid);
 
-            this.ValidationRule(viewModel => viewModel.Teams, allValid, "A Team info is in an invalid state");
+            this.ValidationRule(viewModel => viewModel.ProxyItems, allValid, "A Team info is in an invalid state");
 
             _cleanup = new CompositeDisposable(teamsListDisposable, transform.Connect(), allValid.Connect(), anySelected.Connect());
         }
@@ -119,9 +120,9 @@ namespace ViewModels.Modules.Teams
 
         public ReactiveCommand<TeamProxy, Unit> Delete { get; }
 
-        public ReadOnlyObservableCollection<TeamProxy> Teams { get; }
+        public ReadOnlyObservableCollection<TeamProxy> ProxyItems { get; }
 
-        [Reactive] public TeamProxy? SelectedTeamProxy { get; set; }
+        [Reactive] public TeamProxy? SelectedProxy { get; set; }
 
         public void Dispose()
         {

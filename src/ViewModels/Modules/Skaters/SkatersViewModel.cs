@@ -13,10 +13,11 @@ using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
+using ViewModels.Interfaces;
 
 namespace ViewModels.Modules.Skaters
 {
-    public class SkatersViewModel : ValidatableViewModelBase, IDisposable
+    public class SkatersViewModel : ValidatableViewModelBase, IEntitiesProxyContainerViewModel<SkaterProxy>, IDisposable
     {
         private readonly IEntityService<Skater> _skatersService;
         private readonly Competition _competition;
@@ -37,7 +38,7 @@ namespace ViewModels.Modules.Skaters
                 .Bind(out var skaters)
                 .Subscribe();
 
-            Skaters = skaters;
+            ProxyItems = skaters;
 
             EditDialog = new Interaction<SkaterProxy, Unit>(schedulerProvider.Dispatcher);
 
@@ -45,7 +46,7 @@ namespace ViewModels.Modules.Skaters
 
             AddDialog = new Interaction<SkaterProxy, bool>(schedulerProvider.Dispatcher);
 
-            var anySelected = this.WhenAnyValue(vm => vm.SelectedSkaterProxy)
+            var anySelected = this.WhenAnyValue(vm => vm.SelectedProxy)
                 .Select(skaterProxy => skaterProxy != null)
                 .Publish();
 
@@ -66,7 +67,7 @@ namespace ViewModels.Modules.Skaters
 
             Save = ReactiveCommand.CreateFromTask(skatersService.SaveAsync, allValid);
 
-            this.ValidationRule(viewModel => viewModel.Skaters, allValid, "A Skater info is in an invalid state");
+            this.ValidationRule(viewModel => viewModel.ProxyItems, allValid, "A Skater info is in an invalid state");
 
             _cleanup = new CompositeDisposable(skatersListDisposable, transform.Connect(), allValid.Connect(), anySelected.Connect());
         }
@@ -117,9 +118,9 @@ namespace ViewModels.Modules.Skaters
 
         public ReactiveCommand<Unit, int> Save { get; }
 
-        public ReadOnlyObservableCollection<SkaterProxy> Skaters { get; }
+        public ReadOnlyObservableCollection<SkaterProxy> ProxyItems { get; }
 
-        [Reactive] public SkaterProxy? SelectedSkaterProxy { get; set; }
+        [Reactive] public SkaterProxy? SelectedProxy { get; set; }
 
         public void Dispose()
         {

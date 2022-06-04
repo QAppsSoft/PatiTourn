@@ -42,8 +42,8 @@
                     Command="{Binding AddNew}" />
         </Grid>
         <ListBox x:Name="CompetitionsListBox"
-                 Items="{Binding Competitions}"
-                 SelectedItem="{Binding SelectedCompetitionProxy}">
+                 Items="{Binding ProxyItems}"
+                 SelectedItem="{Binding SelectedProxy}">
 
             <ListBox.ItemTemplate>
                 <DataTemplate x:DataType="competitions:CompetitionProxy" x:CompileBindings="True">

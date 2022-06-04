@@ -41,7 +41,7 @@ namespace ViewModels
 
         private void InitializeProperties(Func<Competition, TeamsViewModel> teamsFactory, Func<Competition, SkatersViewModel> skatersFactory)
         {
-            this.WhenValueChanged(viewModel => viewModel.CompetitionsViewModel.SelectedCompetitionProxy, true, () => null)
+            this.WhenValueChanged(viewModel => viewModel.CompetitionsViewModel.SelectedProxy, true, () => null)
                 .Select(proxy => proxy == null ? Optional.None<CompetitionProxy>() : Optional.Some(proxy))
                 .Select(optional =>
                 {
