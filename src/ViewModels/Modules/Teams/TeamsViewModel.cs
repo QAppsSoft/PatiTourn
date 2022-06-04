@@ -16,7 +16,7 @@ using ViewModels.Interfaces;
 
 namespace ViewModels.Modules.Teams
 {
-    public class TeamsViewModel : ValidatableViewModelBase, IEntitiesProxyContainerViewModel<TeamProxy>, IDisposable
+    public class TeamsViewModel : ValidatableViewModelBase, IEntitiesProxyContainer<TeamProxy>, IDisposable
     {
         private readonly IEntityService<Team> _teamsService;
         private readonly Competition _competition;

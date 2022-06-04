@@ -17,7 +17,7 @@ using ViewModels.Interfaces;
 
 namespace ViewModels.Modules.Competitions
 {
-    public class CompetitionsViewModel : ValidatableViewModelBase, IEntitiesProxyContainerViewModel<CompetitionProxy>, IDisposable
+    public class CompetitionsViewModel : ValidatableViewModelBase, IEntitiesProxyContainer<CompetitionProxy>, IDisposable
     {
         private readonly IEntityService<Competition> _competitionService;
         private readonly IDisposable _cleanup;
