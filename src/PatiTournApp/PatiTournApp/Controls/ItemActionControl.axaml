@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="PatiTournApp.Controls.ItemActionControl">
+    <Grid ColumnDefinitions="Auto * Auto">
+        <StackPanel Grid.Column="0" HorizontalAlignment="Left" Orientation="Horizontal">
+            <Button HorizontalAlignment="Center"
+                    Margin="4"
+                    Content="&#xE710;"
+                    FontFamily="{StaticResource SymbolThemeFontFamily}"
+                    FontSize="32"
+                    Command="{Binding AddNew}"
+                    Cursor="Hand" />
+
+            <Button HorizontalAlignment="Center"
+                    Margin="4"
+                    Content="&#xE70F;"
+                    FontFamily="{StaticResource SymbolThemeFontFamily}"
+                    FontSize="32"
+                    Command="{Binding Edit}"
+                    CommandParameter="{Binding SelectedProxy}"
+                    Cursor="Hand" />
+        </StackPanel>
+        <StackPanel Grid.Column="2" HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button HorizontalAlignment="Center"
+                    Margin="4"
+                    Content="&#xE74D;"
+                    FontFamily="{StaticResource SymbolThemeFontFamily}"
+                    FontSize="32"
+                    Command="{Binding Delete}"
+                    CommandParameter="{Binding SelectedProxy}"
+                    Cursor="Hand" />
+        </StackPanel>
+    </Grid>
+</UserControl>
