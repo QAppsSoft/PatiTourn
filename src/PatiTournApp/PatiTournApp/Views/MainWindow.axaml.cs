@@ -49,14 +49,14 @@ namespace PatiTournApp.Views
             };
 
             using var _ = competitionsViewModel
-                .WhenAnyValue(competitionsViewModel => competitionsViewModel.SelectedCompetitionProxy)
+                .WhenAnyValue(competitionsViewModel => competitionsViewModel.SelectedProxy)
                 .Select(proxy => proxy != null)
                 .ObserveOn(AvaloniaScheduler.Instance)
                 .Subscribe(valid => dialog.IsPrimaryButtonEnabled = valid);
 
             await dialog.ShowAsync().ConfigureAwait(false);
 
-            interaction.SetOutput(competitionsViewModel.SelectedCompetitionProxy!); // Ignored because the dialog cant be closed if a CompetitionProxy is not selected
+            interaction.SetOutput(competitionsViewModel.SelectedProxy!); // Ignored because the dialog cant be closed if a CompetitionProxy is not selected
         }
 
         #region IViewFor<MainWindowViewModel> implementation

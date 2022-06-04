@@ -13,10 +13,11 @@ using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
+using ViewModels.Interfaces;
 
 namespace ViewModels.Modules.Competitions
 {
-    public class CompetitionsViewModel : ValidatableViewModelBase, IDisposable
+    public class CompetitionsViewModel : ValidatableViewModelBase, IEntitiesProxyContainerViewModel<CompetitionProxy>, IDisposable
     {
         private readonly IEntityService<Competition> _competitionService;
         private readonly IDisposable _cleanup;
@@ -47,7 +48,7 @@ namespace ViewModels.Modules.Competitions
                 .Bind(out var competitions)
                 .Subscribe();
 
-            Competitions = competitions;
+            ProxyItems = competitions;
 
             Delete = ReactiveCommand.CreateFromTask<CompetitionProxy>(DeleteCompetitionAsync);
 
@@ -66,7 +67,7 @@ namespace ViewModels.Modules.Competitions
 
             Save = ReactiveCommand.CreateFromTask(competitionService.SaveAsync, allValid);
 
-            this.ValidationRule(viewModel => viewModel.Competitions, allValid, "A Competition info is in an invalid state");
+            this.ValidationRule(viewModel => viewModel.ProxyItems, allValid, "A Competition info is in an invalid state");
 
             _cleanup = new CompositeDisposable(competitionsListDisposable, transform.Connect(), allValid.Connect());
         }
@@ -99,9 +100,9 @@ namespace ViewModels.Modules.Competitions
 
         public ReactiveCommand<CompetitionProxy, Unit> Edit { get; }
 
-        [Reactive] public CompetitionProxy? SelectedCompetitionProxy { get; set; }
+        [Reactive] public CompetitionProxy? SelectedProxy { get; set; }
 
-        public ReadOnlyObservableCollection<CompetitionProxy> Competitions { get; }
+        public ReadOnlyObservableCollection<CompetitionProxy> ProxyItems { get; }
 
         [Reactive] public string Filter { get; set; } = string.Empty;
 

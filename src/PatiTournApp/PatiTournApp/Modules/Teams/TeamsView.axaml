@@ -23,7 +23,7 @@
                     FontFamily="{StaticResource SymbolThemeFontFamily}"
                     FontSize="32"
                     Command="{Binding Edit}"
-                    CommandParameter="{Binding SelectedTeamProxy}"
+                    CommandParameter="{Binding SelectedProxy}"
                     Cursor="Hand" />
         </StackPanel>
         <StackPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right" Orientation="Horizontal">
@@ -33,12 +33,12 @@
                     FontFamily="{StaticResource SymbolThemeFontFamily}"
                     FontSize="32"
                     Command="{Binding Delete}"
-                    CommandParameter="{Binding SelectedTeamProxy}"
+                    CommandParameter="{Binding SelectedProxy}"
                     Cursor="Hand" />
         </StackPanel>
         <ListBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" 
-                 Items="{Binding Teams}"
-                 SelectedItem="{Binding SelectedTeamProxy}">
+                 Items="{Binding ProxyItems}"
+                 SelectedItem="{Binding SelectedProxy}">
             <ListBox.ItemTemplate>
                 <DataTemplate x:DataType="teams:TeamProxy" x:CompileBindings="True">
                     <StackPanel Orientation="Vertical">
