@@ -4,34 +4,40 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="PatiTournApp.Controls.ItemActionControl">
-    <Grid ColumnDefinitions="Auto * Auto">
-        <StackPanel Grid.Column="0" HorizontalAlignment="Left" Orientation="Horizontal">
-            <Button HorizontalAlignment="Center"
-                    Margin="4"
-                    Content="&#xE710;"
-                    FontFamily="{StaticResource SymbolThemeFontFamily}"
-                    FontSize="32"
-                    Command="{Binding AddNew}"
-                    Cursor="Hand" />
+    <Grid RowDefinitions="Auto *">
+        <Grid Grid.Row="0" ColumnDefinitions="Auto * Auto">
+            <StackPanel Grid.Column="0" HorizontalAlignment="Left" Orientation="Horizontal">
+                <Button HorizontalAlignment="Center"
+                        Margin="4"
+                        Content="&#xE710;"
+                        FontFamily="{StaticResource SymbolThemeFontFamily}"
+                        FontSize="32"
+                        Command="{Binding AddNew}"
+                        Cursor="Hand" />
 
-            <Button HorizontalAlignment="Center"
-                    Margin="4"
-                    Content="&#xE70F;"
-                    FontFamily="{StaticResource SymbolThemeFontFamily}"
-                    FontSize="32"
-                    Command="{Binding Edit}"
-                    CommandParameter="{Binding SelectedProxy}"
-                    Cursor="Hand" />
-        </StackPanel>
-        <StackPanel Grid.Column="2" HorizontalAlignment="Right" Orientation="Horizontal">
-            <Button HorizontalAlignment="Center"
-                    Margin="4"
-                    Content="&#xE74D;"
-                    FontFamily="{StaticResource SymbolThemeFontFamily}"
-                    FontSize="32"
-                    Command="{Binding Delete}"
-                    CommandParameter="{Binding SelectedProxy}"
-                    Cursor="Hand" />
-        </StackPanel>
+                <Button HorizontalAlignment="Center"
+                        Margin="4"
+                        Content="&#xE70F;"
+                        FontFamily="{StaticResource SymbolThemeFontFamily}"
+                        FontSize="32"
+                        Command="{Binding Edit}"
+                        CommandParameter="{Binding SelectedProxy}"
+                        Cursor="Hand" />
+            </StackPanel>
+            <StackPanel Grid.Column="2" HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button HorizontalAlignment="Center"
+                        Margin="4"
+                        Content="&#xE74D;"
+                        FontFamily="{StaticResource SymbolThemeFontFamily}"
+                        FontSize="32"
+                        Command="{Binding Delete}"
+                        CommandParameter="{Binding SelectedProxy}"
+                        Cursor="Hand" />
+            </StackPanel>
+        </Grid>
+        <ListBox Grid.Row="1"
+                 Items="{Binding ProxyItems}"
+                 SelectedItem="{Binding SelectedProxy}">
+        </ListBox>
     </Grid>
 </UserControl>

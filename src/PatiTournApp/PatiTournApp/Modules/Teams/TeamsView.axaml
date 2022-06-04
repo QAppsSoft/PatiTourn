@@ -8,19 +8,13 @@
              x:DataType="teams:TeamsViewModel"
              x:CompileBindings="True"
              x:Class="PatiTournApp.Modules.Teams.TeamsView">
-    <Grid RowDefinitions="Auto *">
-        <controls:ItemActionControl Grid.Row="0" />
-        <ListBox Grid.Row="1" 
-                 Items="{Binding ProxyItems}"
-                 SelectedItem="{Binding SelectedProxy}">
-            <ListBox.ItemTemplate>
-                <DataTemplate x:DataType="teams:TeamProxy" x:CompileBindings="True">
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="16" />
-                        <TextBlock Text="{Binding Description}" FontStyle="Italic" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-    </Grid>
+    <UserControl.DataTemplates>
+        <DataTemplate DataType="teams:TeamProxy" x:DataType="teams:TeamProxy" x:CompileBindings="True">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="16" />
+                <TextBlock Text="{Binding Description}" FontStyle="Italic" />
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.DataTemplates>
+    <controls:ItemActionControl />
 </UserControl>
