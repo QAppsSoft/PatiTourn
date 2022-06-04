@@ -3,40 +3,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:teams="clr-namespace:ViewModels.Modules.Teams;assembly=ViewModels"
+             xmlns:controls="clr-namespace:PatiTournApp.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="teams:TeamsViewModel"
              x:CompileBindings="True"
              x:Class="PatiTournApp.Modules.Teams.TeamsView">
-    <Grid ColumnDefinitions="Auto * Auto" RowDefinitions="Auto *">
-        <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
-            <Button HorizontalAlignment="Center"
-                    Margin="4"
-                    Content="&#xE710;"
-                    FontFamily="{StaticResource SymbolThemeFontFamily}"
-                    FontSize="32"
-                    Command="{Binding AddNew}"
-                    Cursor="Hand" />
-
-            <Button HorizontalAlignment="Center"
-                    Margin="4"
-                    Content="&#xE70F;"
-                    FontFamily="{StaticResource SymbolThemeFontFamily}"
-                    FontSize="32"
-                    Command="{Binding Edit}"
-                    CommandParameter="{Binding SelectedProxy}"
-                    Cursor="Hand" />
-        </StackPanel>
-        <StackPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right" Orientation="Horizontal">
-            <Button HorizontalAlignment="Center"
-                    Margin="4"
-                    Content="&#xE74D;"
-                    FontFamily="{StaticResource SymbolThemeFontFamily}"
-                    FontSize="32"
-                    Command="{Binding Delete}"
-                    CommandParameter="{Binding SelectedProxy}"
-                    Cursor="Hand" />
-        </StackPanel>
-        <ListBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" 
+    <Grid RowDefinitions="Auto *">
+        <controls:ItemActionControl Grid.Row="0" />
+        <ListBox Grid.Row="1" 
                  Items="{Binding ProxyItems}"
                  SelectedItem="{Binding SelectedProxy}">
             <ListBox.ItemTemplate>
