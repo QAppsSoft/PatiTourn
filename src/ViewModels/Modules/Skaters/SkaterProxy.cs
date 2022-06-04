@@ -23,6 +23,7 @@ namespace ViewModels.Modules.Skaters
             UpdateOnValueChange();
 
             this.WhenAnyValue(vm => vm.IdentificationNumber)
+                .WhereNotNull()
                 .Where(value => value.Length == 11)
                 .Select(GetBirthDate)
                 .ToPropertyEx(this, vm => vm.BirthDate);
@@ -72,13 +73,13 @@ namespace ViewModels.Modules.Skaters
                 "You must specify a valid lastname");
 
             this.ValidationRule(viewModel => viewModel.LastNames,
-                name => name!.Contains(" ", StringComparison.InvariantCulture),
+                name => name != null && name.Contains(" ", StringComparison.InvariantCulture),
                 "You must specify both lastname");
 
             // Identification Number
             // TODO: Use a more generic Identification Number validation rules according to others nationalities
             this.ValidationRule(viewModel => viewModel.IdentificationNumber,
-                identificationNumber => identificationNumber!.Length == 11,
+                identificationNumber => identificationNumber is { Length: 11 },
                 "Identification number must contain 11 positions");
 
             this.ValidationRule(viewModel => viewModel.IdentificationNumber,
