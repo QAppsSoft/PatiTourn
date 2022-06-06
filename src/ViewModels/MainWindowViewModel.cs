@@ -17,7 +17,7 @@ namespace ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         public MainWindowViewModel(CompetitionsViewModel competitionsViewModel, ISchedulerProvider schedulerProvider,
-            Func<Competition, TeamsViewModel> teamsFactory, Func<Competition, SkatersViewModel> skatersFactory)
+            Func<Competition, TeamsViewModel> teamsFactory, Func<TeamsViewModel, Competition, SkatersViewModel> skatersFactory)
         {
             CompetitionsViewModel =
                 competitionsViewModel ?? throw new ArgumentNullException(nameof(competitionsViewModel));
@@ -39,7 +39,7 @@ namespace ViewModels
 
         public ReactiveCommand<Unit, Unit> SearchCompetitions { get; }
 
-        private void InitializeProperties(Func<Competition, TeamsViewModel> teamsFactory, Func<Competition, SkatersViewModel> skatersFactory)
+        private void InitializeProperties(Func<Competition, TeamsViewModel> teamsFactory, Func<TeamsViewModel, Competition, SkatersViewModel> skatersFactory)
         {
             this.WhenValueChanged(viewModel => viewModel.CompetitionsViewModel.SelectedProxy, true, () => null)
                 .Select(proxy => proxy == null ? Optional.None<CompetitionProxy>() : Optional.Some(proxy))
@@ -50,9 +50,12 @@ namespace ViewModels
                         return null;
                     }
 
+                    var teamsViewModel = teamsFactory(optional.Value);
+                    var skatersViewModel = skatersFactory(teamsViewModel, optional.Value);
+
                     return new CompetitionExtendedProxy(
-                        teamsFactory(optional.Value),
-                        skatersFactory(optional.Value),
+                        teamsViewModel,
+                        skatersViewModel,
                         optional.Value);
                 })
                 .ToPropertyEx(this, x => x.CompetitionExtended);

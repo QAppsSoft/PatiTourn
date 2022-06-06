@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Reactive.Linq;
 using DataModel;
@@ -7,14 +8,17 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ViewModels.Extensions;
+using ViewModels.Modules.Teams;
 
 namespace ViewModels.Modules.Skaters
 {
     public sealed class SkaterProxy : ValidatableViewModelBase, IEntityProxy<Skater>
     {
-        public SkaterProxy(Skater skater)
+        public SkaterProxy(Skater skater, TeamsViewModel teamsViewModel)
         {
             Entity = skater ?? throw new ArgumentNullException(nameof(skater));
+
+            Teams = teamsViewModel.ProxyItems;
 
             InitializeProperties(skater);
 
@@ -49,6 +53,8 @@ namespace ViewModels.Modules.Skaters
         [ObservableAsProperty] public DateTime BirthDate { get; }
 
         [ObservableAsProperty] public int Age { get; }
+
+        public ReadOnlyObservableCollection<TeamProxy> Teams { get; }
 
         private void InitializeProperties(Skater skater)
         {
@@ -113,12 +119,17 @@ namespace ViewModels.Modules.Skaters
                 .Subscribe(value =>
                 {
                     var (name, lastname, identification, sex, number, team) = value;
+
                     Entity.Name = name;
                     Entity.LastNames = lastname;
                     Entity.IdentificationNumber = identification;
                     Entity.Sex = sex ?? DataModel.Enums.Sex.Male;
                     Entity.Number = number;
-                    Entity.Team = team;
+
+                    if (team != null)
+                    {
+                        Entity.TeamId = team.Id;
+                    }
                 });
         }
 
@@ -134,12 +145,6 @@ namespace ViewModels.Modules.Skaters
         public static implicit operator Skater(SkaterProxy skaterProxy)
         {
             return skaterProxy.Entity;
-        }
-
-
-        public static explicit operator SkaterProxy(Skater skater)
-        {
-            return new SkaterProxy(skater);
         }
     }
 }
