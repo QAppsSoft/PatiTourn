@@ -5,6 +5,8 @@
              xmlns:competitions="clr-namespace:ViewModels.Modules.Competitions;assembly=ViewModels"
              xmlns:teams="clr-namespace:ViewModels.Modules.Teams;assembly=ViewModels"
              xmlns:views="clr-namespace:PatiTournApp.Modules.Teams"
+             xmlns:skaters="clr-namespace:ViewModels.Modules.Skaters;assembly=ViewModels"
+             xmlns:skaters1="clr-namespace:PatiTournApp.Modules.Skaters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="competitions:CompetitionExtendedProxy"
              x:CompileBindings="True"
@@ -13,10 +15,16 @@
         <DataTemplate DataType="teams:TeamsViewModel" x:DataType="teams:TeamsViewModel">
             <views:TeamsView />
         </DataTemplate>
+        <DataTemplate DataType="skaters:SkatersViewModel" x:DataType="skaters:SkatersViewModel">
+            <skaters1:SkatersView />
+        </DataTemplate>
     </UserControl.DataTemplates>
     <TabControl>
         <TabItem Header="Teams">
             <ContentControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="{Binding TeamsViewModel}" />
+        </TabItem>
+        <TabItem Header="Skaters">
+            <ContentControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="{Binding SkatersViewModel}" />
         </TabItem>
     </TabControl>
 </UserControl>

@@ -33,9 +33,5 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\..\ViewModels\ViewModels.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Modules\Skaters\" />
-	</ItemGroup>
 	
 </Project>

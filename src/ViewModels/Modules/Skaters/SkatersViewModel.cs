@@ -14,22 +14,25 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ViewModels.Interfaces;
+using ViewModels.Modules.Teams;
 
 namespace ViewModels.Modules.Skaters
 {
     public class SkatersViewModel : ValidatableViewModelBase, IEntitiesProxyContainer<SkaterProxy>, IDisposable
     {
         private readonly IEntityService<Skater> _skatersService;
+        private readonly TeamsViewModel _teamsViewModel;
         private readonly Competition _competition;
         private readonly IDisposable _cleanup;
 
-        public SkatersViewModel(IEntityService<Skater> skatersService, ISchedulerProvider schedulerProvider, Competition competition)
+        public SkatersViewModel(IEntityService<Skater> skatersService, ISchedulerProvider schedulerProvider, TeamsViewModel teamsViewModel, Competition competition)
         {
             _skatersService = skatersService ?? throw new ArgumentNullException(nameof(skatersService));
+            _teamsViewModel = teamsViewModel ?? throw new ArgumentNullException(nameof(teamsViewModel));
             _competition = competition ?? throw new ArgumentNullException(nameof(competition));
 
             var transform = skatersService.List.Connect()
-                .Transform(skater => new SkaterProxy(skater))
+                .Transform(skater => new SkaterProxy(skater, teamsViewModel))
                 .Publish();
 
             var skatersListDisposable = transform
@@ -94,11 +97,12 @@ namespace ViewModels.Modules.Skaters
             var skater = _skatersService.Create();
             skater.CompetitionId = _competition.Id;
 
-            var result = await AddDialog.Handle(new SkaterProxy(skater));
-            
+            var result = await AddDialog.Handle(new SkaterProxy(skater, _teamsViewModel));
+
             if (result)
             {
                 _skatersService.Add(skater);
+                await _skatersService.SaveAsync().ConfigureAwait(false);
             }
         }
 

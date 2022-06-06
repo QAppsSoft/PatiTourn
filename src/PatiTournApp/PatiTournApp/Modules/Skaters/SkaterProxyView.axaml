@@ -1,0 +1,39 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:skaters="clr-namespace:ViewModels.Modules.Skaters;assembly=ViewModels"
+             xmlns:converters="clr-namespace:PatiTournApp.Converters"
+             xmlns:teams="clr-namespace:ViewModels.Modules.Teams;assembly=ViewModels"
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="450"
+             x:DataType="skaters:SkaterProxy"
+             x:CompileBindings="True"
+             x:Class="PatiTournApp.Modules.Skaters.SkaterProxyView">
+    <StackPanel>
+        <TextBlock Text="Name:" />
+        <TextBox Text="{Binding Name}" />
+
+        <TextBlock Text="Last name:" />
+        <TextBox Text="{Binding LastNames}" />
+
+        <TextBlock Text="Identity number:" />
+        <TextBox Text="{Binding IdentificationNumber}" />
+
+        <TextBlock Text="Sex:" />
+        <ComboBox
+            Items="{Binding Path=Sex, Converter={converters:EnumToCollectionConverter}, Mode=OneTime}"
+            SelectedItem="{Binding Path=Sex}" />
+        
+        <TextBlock Text="Number:" />
+        <TextBox Text="{Binding Number}" />
+
+        <TextBlock Text="Team:" />
+        <ComboBox SelectedItem="{Binding Team}" Items="{Binding Teams}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="teams:TeamProxy" DataType="teams:TeamProxy">
+                    <TextBlock Text="{Binding Name}"></TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+    </StackPanel>
+</UserControl>
