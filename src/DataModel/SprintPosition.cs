@@ -11,6 +11,6 @@ namespace DataModel
         //fully defined relationship
         public Guid SprintId { get; set; }
 
-        public Sprint Sprint { get; set; } = null!;
+        public virtual Sprint Sprint { get; set; } = null!;
     }
 }

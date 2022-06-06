@@ -15,9 +15,9 @@ namespace DataModel
 
         public DateTime EndDate { get; set; } = DateTime.Today.AddDays(3);
 
-        public ICollection<Skater> Skaters { get; set; } = null!;
-        public ICollection<Event> Events { get; set; } = null!;
-        public ICollection<Referee> Referees { get; set; } = null!;
-        public ICollection<Team> Teams { get; set; } = null!;
+        public virtual ICollection<Skater> Skaters { get; set; } = null!;
+        public virtual ICollection<Event> Events { get; set; } = null!;
+        public virtual ICollection<Referee> Referees { get; set; } = null!;
+        public virtual ICollection<Team> Teams { get; set; } = null!;
     }
 }

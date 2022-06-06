@@ -15,6 +15,6 @@ namespace DataModel
 
         //fully defined relationship
         public Guid CompetitionId { get; set; }
-        public Competition Competition { get; set; } = null!;
+        public virtual Competition Competition { get; set; } = null!;
     }
 }

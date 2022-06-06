@@ -10,10 +10,10 @@ namespace DataModel
 
         //fully defined relationship
         public Guid CompetitionId { get; set; }
-        public Competition Competition { get; set; } = null!;
+        public virtual Competition Competition { get; set; } = null!;
 
         //fully defined relationship
         public Guid TeamId { get; set; }
-        public Team Team { get; set; } = null!;
+        public virtual Team Team { get; set; } = null!;
     }
 }
