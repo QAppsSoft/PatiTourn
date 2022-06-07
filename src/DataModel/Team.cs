@@ -30,7 +30,8 @@ namespace DataModel
                 return true;
             }
 
-            return string.Equals(Name, other.Name, StringComparison.Ordinal) &&
+            return Id == other.Id &&
+                   string.Equals(Name, other.Name, StringComparison.Ordinal) &&
                    string.Equals(Description, other.Description, StringComparison.Ordinal) &&
                    CompetitionId.Equals(other.CompetitionId);
         }
@@ -57,7 +58,7 @@ namespace DataModel
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Name, Description, CompetitionId);
+            return HashCode.Combine(Id, Name, Description, CompetitionId);
         }
     }
 }
