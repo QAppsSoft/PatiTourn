@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Disposables;
 using DataModel;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -6,11 +7,15 @@ using ReactiveUI.Validation.Extensions;
 
 namespace ViewModels.Modules.Competitions
 {
-    public sealed class CompetitionProxy : ValidatableViewModelBase, IEntityProxy<Competition>
+    public sealed class CompetitionProxy : ValidatableViewModelBase, IEntityProxy<Competition>, IDisposable
     {
+        private readonly CompositeDisposable _cleanup = new();
+
         public CompetitionProxy(Competition competition)
         {
-            Entity = competition ?? throw new ArgumentNullException(nameof(competition));
+            ArgumentNullException.ThrowIfNull(competition);
+
+            Entity = competition;
 
             InitializeProperties(competition);
 
@@ -64,18 +69,21 @@ namespace ViewModels.Modules.Competitions
 
         private void UpdateOnValueChange()
         {
-            this.WhenAnyValue(vm => vm.Name,
-                    vm => vm.Category,
-                    vm => vm.StartDate,
-                    vm => vm.EndDate)
-                .Subscribe(value =>
-                {
-                    var (name, category, startDate, endDate) = value;
-                    Entity.Name = name;
-                    Entity.Category = category;
-                    Entity.StartDate = startDate;
-                    Entity.EndDate = endDate;
-                });
+            this.WhenAnyValue(vm => vm.Name)
+                .Subscribe(name => Entity.Name = name)
+                .DisposeWith(_cleanup);
+
+            this.WhenAnyValue(vm => vm.Category)
+                .Subscribe(category => Entity.Category = category)
+                .DisposeWith(_cleanup);
+
+            this.WhenAnyValue(vm => vm.StartDate)
+                .Subscribe(startDate => Entity.StartDate = startDate)
+                .DisposeWith(_cleanup);
+
+            this.WhenAnyValue(vm => vm.EndDate)
+                .Subscribe(endDate => Entity.EndDate = endDate)
+                .DisposeWith(_cleanup);
         }
 
         public static implicit operator Competition(CompetitionProxy competitionProxy)
@@ -86,6 +94,11 @@ namespace ViewModels.Modules.Competitions
         public static explicit operator CompetitionProxy(Competition competition)
         {
             return new CompetitionProxy(competition);
+        }
+
+        public void Dispose()
+        {
+            _cleanup.Dispose();
         }
     }
 }

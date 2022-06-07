@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Disposables;
 using DataModel;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -6,11 +7,16 @@ using ReactiveUI.Validation.Extensions;
 
 namespace ViewModels.Modules.Teams
 {
-    public sealed class TeamProxy : ValidatableViewModelBase, IEntityProxy<Team>
+    public sealed class TeamProxy : ValidatableViewModelBase, IEntityProxy<Team>, IDisposable
     {
+        private readonly CompositeDisposable _cleanup = new();
+
         public TeamProxy(Team team)
         {
-            Entity = team ?? throw new ArgumentNullException(nameof(team));
+            ArgumentNullException.ThrowIfNull(team);
+
+            Entity = team;
+
             InitializeProperties(team);
 
             InitializeValidations();
@@ -33,13 +39,13 @@ namespace ViewModels.Modules.Teams
 
         private void UpdateOnValueChange()
         {
-            this.WhenAnyValue(vm => vm.Name, vm => vm.Description)
-                .Subscribe(value =>
-                {
-                    var (name, description) = value;
-                    Entity.Name = name;
-                    Entity.Description = description;
-                });
+            this.WhenAnyValue(vm => vm.Name)
+                .Subscribe(name => Entity.Name = name)
+                .DisposeWith(_cleanup);
+
+            this.WhenAnyValue(vm => vm.Description)
+                .Subscribe(description => Entity.Description = description)
+                .DisposeWith(_cleanup);
         }
 
         private void InitializeProperties(Team team)
@@ -62,6 +68,11 @@ namespace ViewModels.Modules.Teams
         public static explicit operator TeamProxy(Team team)
         {
             return new TeamProxy(team);
+        }
+
+        public void Dispose()
+        {
+            _cleanup.Dispose();
         }
     }
 }
