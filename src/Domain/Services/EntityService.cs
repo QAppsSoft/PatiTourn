@@ -66,10 +66,12 @@ namespace Domain.Services
 
             if (dbEntity == null)
             {
-                throw new Exception(); // TODO: Investigate what to do in this particular case
+                _entityList.Remove(updatedEntity);
             }
-
-            updateProperties(new UpdateEntityContainer<TEntity>(updatedEntity, dbEntity));
+            else
+            {
+                updateProperties(new UpdateEntityContainer<TEntity>(updatedEntity, dbEntity));
+            }
 
             await context.SaveChangesAsync().ConfigureAwait(false);
         }
