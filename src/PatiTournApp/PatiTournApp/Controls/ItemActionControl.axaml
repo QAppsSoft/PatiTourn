@@ -23,6 +23,14 @@
                         Command="{Binding Edit}"
                         CommandParameter="{Binding SelectedProxy}"
                         Cursor="Hand" />
+
+                <Button HorizontalAlignment="Center"
+                        Margin="4"
+                        Content="&#xE72C;"
+                        FontFamily="{StaticResource SymbolThemeFontFamily}"
+                        FontSize="32"
+                        Command="{Binding Refresh}"
+                        Cursor="Hand" />
             </StackPanel>
             <StackPanel Grid.Column="2" HorizontalAlignment="Right" Orientation="Horizontal">
                 <Button HorizontalAlignment="Center"
