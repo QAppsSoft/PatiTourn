@@ -52,7 +52,7 @@ namespace ViewModels.Modules.Competitions
 
             Delete = ReactiveCommand.CreateFromTask<CompetitionProxy>(DeleteCompetitionAsync);
 
-            Refresh = ReactiveCommand.Create(competitionService.Refresh);
+            Refresh = ReactiveCommand.CreateFromTask(competitionService.RefreshAsync);
 
             AddNew = ReactiveCommand.CreateFromTask(AddCompetitionAsync);
 
@@ -64,8 +64,6 @@ namespace ViewModels.Modules.Competitions
                 .Select(count => count == 0)
                 .StartWith(true)
                 .Publish();
-
-            Save = ReactiveCommand.CreateFromTask(competitionService.SaveAsync, allValid);
 
             this.ValidationRule(viewModel => viewModel.ProxyItems, allValid, "A Competition info is in an invalid state");
 
@@ -80,7 +78,7 @@ namespace ViewModels.Modules.Competitions
 
             if (result)
             {
-                _competitionService.Add(competition);
+                await _competitionService.AddAsync(competition).ConfigureAwait(false);
             }
         }
 
@@ -89,8 +87,6 @@ namespace ViewModels.Modules.Competitions
         public Interaction<CompetitionProxy, Unit> EditDialog { get; }
 
         public Interaction<CompetitionProxy, bool> AddDialog { get; }
-
-        public ReactiveCommand<Unit, int> Save { get; }
 
         public ReactiveCommand<Unit, Unit> AddNew { get; }
 
@@ -112,15 +108,23 @@ namespace ViewModels.Modules.Competitions
 
             if (canDelete)
             {
-                _competitionService.Remove(competition);
-                await _competitionService.SaveAsync().ConfigureAwait(false);
+                await _competitionService.RemoveAsync(competition).ConfigureAwait(false);
             }
         }
         
         private async Task EditCompetitionAsync(CompetitionProxy competition)
         {
             await EditDialog.Handle(competition);
-            await _competitionService.SaveAsync().ConfigureAwait(false);
+            await _competitionService.EditAsync(competition, UpdateDataBaseEntityProperties).ConfigureAwait(false);
+        }
+
+        private static void UpdateDataBaseEntityProperties(UpdateEntityContainer<Competition> container)
+        {
+            var (editedEntity, databaseEntity) = container;
+            databaseEntity.Name = editedEntity.Name;
+            databaseEntity.Category = editedEntity.Category;
+            databaseEntity.StartDate = editedEntity.StartDate;
+            databaseEntity.EndDate = editedEntity.EndDate;
         }
 
         private static Func<CompetitionProxy, bool> BuildFilter(string filter)

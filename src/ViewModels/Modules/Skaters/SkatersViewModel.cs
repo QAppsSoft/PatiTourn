@@ -55,7 +55,7 @@ namespace ViewModels.Modules.Skaters
 
             Delete = ReactiveCommand.CreateFromTask<SkaterProxy>(DeleteSkaterAsync, anySelected);
 
-            Refresh = ReactiveCommand.Create(() => skatersService.Refresh(skater => skater.CompetitionId == competition.Id));
+            Refresh = ReactiveCommand.CreateFromTask(() => skatersService.RefreshAsync(skater => skater.CompetitionId == competition.Id));
 
             AddNew = ReactiveCommand.CreateFromTask(AddSkaterAsync);
 
@@ -68,8 +68,6 @@ namespace ViewModels.Modules.Skaters
                 .StartWith(true)
                 .Publish();
 
-            Save = ReactiveCommand.CreateFromTask(skatersService.SaveAsync, allValid);
-
             this.ValidationRule(viewModel => viewModel.ProxyItems, allValid, "A Skater info is in an invalid state");
 
             _cleanup = new CompositeDisposable(skatersListDisposable, transform.Connect(), allValid.Connect(), anySelected.Connect());
@@ -78,7 +76,18 @@ namespace ViewModels.Modules.Skaters
         private async Task EditSkaterAsync(SkaterProxy skaterProxy)
         {
             await EditDialog.Handle(skaterProxy);
-            await _skatersService.SaveAsync().ConfigureAwait(false);
+            await _skatersService.EditAsync(skaterProxy, UpdateDataBaseEntityProperties).ConfigureAwait(false);
+        }
+
+        private static void UpdateDataBaseEntityProperties(UpdateEntityContainer<Skater> container)
+        {
+            var (editedEntity, databaseEntity) = container;
+            databaseEntity.Name = editedEntity.Name;
+            databaseEntity.LastNames = editedEntity.LastNames;
+            databaseEntity.IdentificationNumber = editedEntity.IdentificationNumber;
+            databaseEntity.Sex = editedEntity.Sex;
+            databaseEntity.TeamId = editedEntity.TeamId;
+            databaseEntity.CompetitionId = editedEntity.CompetitionId;
         }
 
         private async Task DeleteSkaterAsync(SkaterProxy skaterProxy)
@@ -87,8 +96,7 @@ namespace ViewModels.Modules.Skaters
 
             if (canDelete)
             {
-                _skatersService.Remove(skaterProxy);
-                await _skatersService.SaveAsync().ConfigureAwait(false);
+                await _skatersService.RemoveAsync(skaterProxy).ConfigureAwait(false);
             }
         }
 
@@ -101,8 +109,7 @@ namespace ViewModels.Modules.Skaters
 
             if (result)
             {
-                _skatersService.Add(skater);
-                await _skatersService.SaveAsync().ConfigureAwait(false);
+                await _skatersService.AddAsync(skater).ConfigureAwait(false);
             }
         }
 
@@ -119,8 +126,6 @@ namespace ViewModels.Modules.Skaters
         public ReactiveCommand<SkaterProxy, Unit> Delete { get; }
 
         public ReactiveCommand<Unit, Unit> Refresh { get; }
-
-        public ReactiveCommand<Unit, int> Save { get; }
 
         public ReadOnlyObservableCollection<SkaterProxy> ProxyItems { get; }
 

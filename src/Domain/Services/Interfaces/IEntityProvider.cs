@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using DataModel;
 using DynamicData;
 
@@ -10,8 +11,8 @@ namespace Domain.Services.Interfaces
     {
         IObservableList<TEntity> List { get; }
 
-        void Refresh();
+        Task RefreshAsync();
 
-        void Refresh(Expression<Func<TEntity, bool>> filter);
+        Task RefreshAsync(Expression<Func<TEntity, bool>> filter);
     }
 }
