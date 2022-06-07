@@ -53,7 +53,7 @@ namespace ViewModels.Modules.Teams
             
             Delete = ReactiveCommand.CreateFromTask<TeamProxy>(DeleteTeamAsync, anySelected);
 
-            Refresh = ReactiveCommand.Create(() => teamsService.Refresh(team => team.CompetitionId == competition.Id));
+            Refresh = ReactiveCommand.CreateFromTask(() => teamsService.RefreshAsync(team => team.CompetitionId == competition.Id));
 
             AddNew = ReactiveCommand.CreateFromTask(AddTeamAsync);
 
@@ -65,8 +65,6 @@ namespace ViewModels.Modules.Teams
                 .Select(count => count == 0)
                 .StartWith(true)
                 .Publish();
-
-            Save = ReactiveCommand.CreateFromTask(teamsService.SaveAsync, allValid);
 
             this.ValidationRule(viewModel => viewModel.ProxyItems, allValid, "A Team info is in an invalid state");
 
@@ -82,8 +80,7 @@ namespace ViewModels.Modules.Teams
 
             if (result)
             {
-                _teamsService.Add(team);
-                await _teamsService.SaveAsync().ConfigureAwait(false);
+                await _teamsService.AddAsync(team).ConfigureAwait(false);
             }
         }
 
@@ -93,15 +90,25 @@ namespace ViewModels.Modules.Teams
 
             if (canDelete)
             {
-                _teamsService.Remove(team);
-                await _teamsService.SaveAsync().ConfigureAwait(false);
+                await _teamsService.RemoveAsync(team).ConfigureAwait(false);
             }
         }
 
         private async Task EditTeamAsync(TeamProxy teamProxy)
         {
             await EditDialog.Handle(teamProxy);
-            await _teamsService.SaveAsync().ConfigureAwait(false);
+
+
+
+            await _teamsService.EditAsync(teamProxy, UpdateDataBaseEntityProperties).ConfigureAwait(false);
+        }
+
+        private static void UpdateDataBaseEntityProperties(UpdateEntityContainer<Team> container)
+        {
+            var (editedEntity, databaseEntity) = container;
+            databaseEntity.Name = editedEntity.Name;
+            databaseEntity.Description = editedEntity.Description;
+            databaseEntity.CompetitionId = editedEntity.CompetitionId;
         }
 
         public Interaction<TeamProxy, Unit> EditDialog { get; }
@@ -109,8 +116,6 @@ namespace ViewModels.Modules.Teams
         public Interaction<TeamProxy, bool> ConfirmDeleteDialog { get; }
 
         public Interaction<TeamProxy, bool> AddDialog { get; }
-
-        public ReactiveCommand<Unit, int> Save { get; }
 
         public ReactiveCommand<Unit, Unit> AddNew { get; }
 

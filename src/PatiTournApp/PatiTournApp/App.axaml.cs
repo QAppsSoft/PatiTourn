@@ -85,6 +85,9 @@ namespace PatiTournApp
                 ServiceLifetime.Transient,
                 ServiceLifetime.Singleton);
 
+            serviceCollection.AddTransient(provider =>
+                new Func<DbContext>(provider.GetRequiredService<PatiTournDataBaseContext>));
+
             RegisterEntities(serviceCollection);
 
             RegisterViewModels(serviceCollection);

@@ -6,8 +6,6 @@ namespace ViewModels.Interfaces
 {
     public interface IEntitiesProxyContainer<TProxy>
     {
-        ReactiveCommand<Unit, int> Save { get; }
-
         ReactiveCommand<Unit, Unit> AddNew { get; }
 
         ReactiveCommand<Unit, Unit> Refresh { get; }

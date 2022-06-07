@@ -6,6 +6,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <AvaloniaXaml Remove="Modules\Events\**" />
+	  <Compile Remove="Modules\Events\**" />
+	  <EmbeddedResource Remove="Modules\Events\**" />
+	  <None Remove="Modules\Events\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
 		<PackageReference Include="Meziantou.Analyzer" Version="1.0.702">
 		  <PrivateAssets>all</PrivateAssets>
@@ -22,10 +29,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Common\Common.csproj" />
 		<ProjectReference Include="..\Domain\Domain.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Modules\Events\" />
 	</ItemGroup>
 
 </Project>

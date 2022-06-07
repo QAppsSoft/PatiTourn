@@ -5,44 +5,64 @@ using System.Threading.Tasks;
 using DataModel;
 using Domain.Services.Interfaces;
 using DynamicData;
-using DynamicData.Binding;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Domain.Services
 {
     public class EntityService<TEntity> : IEntityService<TEntity>
         where TEntity : BaseEntity, new()
     {
-        private readonly PatiTournDataBaseContext _dataBaseContext;
+        private readonly Func<DbContext> _dataBaseContextFactory;
         private readonly SourceList<TEntity> _entityList;
 
-        public EntityService(PatiTournDataBaseContext dataBaseContext)
+        public EntityService(Func<DbContext> dataBaseContextFactory)
         {
-            _dataBaseContext = dataBaseContext ?? throw new ArgumentNullException(nameof(dataBaseContext));
-
-            var source = _dataBaseContext.Set<TEntity>()
-                .Local
-                //.ToObservableChangeSet<LocalView<TEntity>, TEntity>(); // TODO: Check why this is failing
-                .ToObservableCollection()
-                .ToObservableChangeSet();
-
-            _entityList = new SourceList<TEntity>(source);
+            _dataBaseContextFactory = dataBaseContextFactory ?? throw new ArgumentNullException(nameof(dataBaseContextFactory));
+            
+            _entityList = new SourceList<TEntity>();
 
             List = _entityList.AsObservableList();
         }
 
         public IObservableList<TEntity> List { get; }
 
-        public void Add(TEntity skater)
+        public async Task AddAsync(TEntity skater)
         {
-            _dataBaseContext.Add(skater);
+            var context = _dataBaseContextFactory();
+            await using var _ = context.ConfigureAwait(false);
+
+            context.Add(skater);
+            await context.SaveChangesAsync().ConfigureAwait(false);
+
+            _entityList.Add(skater);
         }
 
-        public void Remove(TEntity skater)
+        public async Task RemoveAsync(TEntity skater)
         {
-            _dataBaseContext.Remove(skater);
+            var context = _dataBaseContextFactory();
+            await using var _ = context.ConfigureAwait(false);
+            
+            context.Remove(skater);
+            await context.SaveChangesAsync().ConfigureAwait(false);
+
+            _entityList.Remove(skater);
+        }
+
+        public async Task EditAsync(TEntity updatedEntity, Action<UpdateEntityContainer<TEntity>> updateProperties)
+        {
+            var context = _dataBaseContextFactory();
+            await using var _ = context.ConfigureAwait(false);
+
+            var dbEntity = await context.Set<TEntity>().FindAsync(updatedEntity.Id).ConfigureAwait(false);
+
+            if (dbEntity == null)
+            {
+                throw new Exception(); // TODO: Investigate what to do in this particular case
+            }
+
+            updateProperties(new UpdateEntityContainer<TEntity>(updatedEntity, dbEntity));
+
+            await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public TEntity Create()
@@ -50,39 +70,36 @@ namespace Domain.Services
             return new TEntity { Id = Guid.NewGuid() };
         }
 
-        public void Refresh()
+        public async Task RefreshAsync()
         {
-            _dataBaseContext.Set<TEntity>().Load();
-        }
+            var context = _dataBaseContextFactory();
+            await using var _ = context.ConfigureAwait(false);
 
-        public void Refresh(Expression<Func<TEntity, bool>> filter)
-        {
-            _dataBaseContext.Set<TEntity>().Where(filter).Load();
-        }
-
-        public bool IsDirty(TEntity skater)
-        {
-            var state = _dataBaseContext.Entry(skater).State;
-
-            return state switch
+            var entities = await context.Set<TEntity>().ToListAsync().ConfigureAwait(false);
+            
+            _entityList.Edit(cache =>
             {
-                EntityState.Modified => true,
-                EntityState.Added => true,
-                EntityState.Detached => false,
-                EntityState.Unchanged => false,
-                EntityState.Deleted => false,
-                _ => false
-            };
+                cache.Clear();
+                cache.AddRange(entities);
+            });
         }
 
-        public Task<int> SaveAsync()
+        public async Task RefreshAsync(Expression<Func<TEntity, bool>> filter)
         {
-            return _dataBaseContext.SaveChangesAsync();
-        }
+            var context = _dataBaseContextFactory();
+            await using var _ = context.ConfigureAwait(false);
 
+            var entities = await context.Set<TEntity>().Where(filter).ToListAsync().ConfigureAwait(false);
+
+            _entityList.Edit(cache =>
+            {
+                cache.Clear();
+                cache.AddRange(entities);
+            });
+        }
+        
         public void Dispose()
         {
-            _dataBaseContext.Dispose();
             _entityList.Dispose();
             List.Dispose();
         }
