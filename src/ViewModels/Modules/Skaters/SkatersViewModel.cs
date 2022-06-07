@@ -42,7 +42,7 @@ namespace ViewModels.Modules.Skaters
                 .Publish();
 
             var skatersListDisposable = transform
-                .Sort(SortExpressionComparer<SkaterProxy>.Ascending(x => x.Team.Id).ThenByAscending(x => x.Number))
+                .Sort(SortExpressionComparer<SkaterProxy>.Ascending(x => x.Name))
                 .ObserveOn(schedulerProvider.Dispatcher)
                 .Bind(out var skaters)
                 .Subscribe();
