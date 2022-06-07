@@ -77,11 +77,8 @@ namespace PatiTournApp
 
             serviceCollection.AddSingleton<ISchedulerProvider, SchedulerProvider>();
 
-            serviceCollection.AddDbContext<PatiTournDataBaseContext>(options =>
-                {
-                    options.UseSqlite(@"Data Source=PatiTourn.db;")
-                        .UseLazyLoadingProxies();
-                },
+            serviceCollection.AddDbContext<PatiTournDataBaseContext>(
+                options => options.UseSqlite(@"Data Source=PatiTourn.db;"),
                 ServiceLifetime.Transient,
                 ServiceLifetime.Singleton);
 
@@ -100,10 +97,8 @@ namespace PatiTournApp
         private static void RegisterParameterizedViewModels(IServiceCollection serviceCollection)
         {
             // Register view-models factories with dynamic parameter
-            serviceCollection.AddTransient(provider => new Func<TeamsViewModel, Competition, SkatersViewModel>(
-                (teamsViewModel, competition) => ActivatorUtilities.CreateInstance<SkatersViewModel>(provider,
-                    teamsViewModel,
-                    competition)));
+            serviceCollection.AddTransient(provider => new Func<Competition, SkatersViewModel>(competition =>
+                ActivatorUtilities.CreateInstance<SkatersViewModel>(provider, competition)));
 
             serviceCollection.AddTransient(provider => new Func<Competition, TeamsViewModel>(competition =>
                 ActivatorUtilities.CreateInstance<TeamsViewModel>(provider, competition)));
@@ -127,7 +122,7 @@ namespace PatiTournApp
             {
                 scan.FromAssemblyOf<IService>()
                     .AddClasses(classes => classes.AssignableTo(typeof(IEntityService<>)))
-                    .AsMatchingInterface()
+                    .AsImplementedInterfaces()
                     .WithTransientLifetime();
             });
         }
