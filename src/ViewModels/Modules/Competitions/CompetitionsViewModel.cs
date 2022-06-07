@@ -24,7 +24,10 @@ namespace ViewModels.Modules.Competitions
 
         public CompetitionsViewModel(IEntityService<Competition> competitionService, ISchedulerProvider schedulerProvider)
         {
-            _competitionService = competitionService ?? throw new ArgumentNullException(nameof(competitionService));
+            ArgumentNullException.ThrowIfNull(competitionService);
+            ArgumentNullException.ThrowIfNull(schedulerProvider);
+
+            _competitionService = competitionService;
 
             ConfirmDeleteDialog = new Interaction<CompetitionProxy, bool>(schedulerProvider.Dispatcher);
 

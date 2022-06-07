@@ -8,6 +8,8 @@ namespace Common.Extensions
     {
         public static IObservable<Unit> ToUnit<T>(this IObservable<T> observable)
         {
+            ArgumentNullException.ThrowIfNull(observable);
+
             return observable.Select(_ => Unit.Default);
         }
     }

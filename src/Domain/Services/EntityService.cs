@@ -17,7 +17,9 @@ namespace Domain.Services
 
         public EntityService(Func<DbContext> dataBaseContextFactory)
         {
-            _dataBaseContextFactory = dataBaseContextFactory ?? throw new ArgumentNullException(nameof(dataBaseContextFactory));
+            ArgumentNullException.ThrowIfNull(dataBaseContextFactory);
+
+            _dataBaseContextFactory = dataBaseContextFactory;
             
             _entityList = new SourceList<TEntity>();
 
@@ -28,6 +30,8 @@ namespace Domain.Services
 
         public async Task AddAsync(TEntity skater)
         {
+            ArgumentNullException.ThrowIfNull(skater);
+
             var context = _dataBaseContextFactory();
             await using var _ = context.ConfigureAwait(false);
 
@@ -39,6 +43,8 @@ namespace Domain.Services
 
         public async Task RemoveAsync(TEntity skater)
         {
+            ArgumentNullException.ThrowIfNull(skater);
+
             var context = _dataBaseContextFactory();
             await using var _ = context.ConfigureAwait(false);
             
@@ -50,6 +56,9 @@ namespace Domain.Services
 
         public async Task EditAsync(TEntity updatedEntity, Action<UpdateEntityContainer<TEntity>> updateProperties)
         {
+            ArgumentNullException.ThrowIfNull(updatedEntity);
+            ArgumentNullException.ThrowIfNull(updateProperties);
+
             var context = _dataBaseContextFactory();
             await using var _ = context.ConfigureAwait(false);
 
@@ -86,6 +95,8 @@ namespace Domain.Services
 
         public async Task RefreshAsync(Expression<Func<TEntity, bool>> filter)
         {
+            ArgumentNullException.ThrowIfNull(filter);
+
             var context = _dataBaseContextFactory();
             await using var _ = context.ConfigureAwait(false);
 

@@ -13,9 +13,13 @@ namespace ViewModels.Modules.Competitions
 
         public CompetitionExtendedProxy(TeamsViewModel teamsViewModel, SkatersViewModel skatersViewModel, Competition competition)
         {
-            Competition = competition ?? throw new ArgumentNullException(nameof(competition));
-            TeamsViewModel = teamsViewModel ?? throw new ArgumentNullException(nameof(teamsViewModel));
-            SkatersViewModel = skatersViewModel ?? throw new ArgumentNullException(nameof(skatersViewModel));
+            ArgumentNullException.ThrowIfNull(teamsViewModel);
+            ArgumentNullException.ThrowIfNull(skatersViewModel);
+            ArgumentNullException.ThrowIfNull(competition);
+
+            Competition = competition;
+            TeamsViewModel = teamsViewModel;
+            SkatersViewModel = skatersViewModel;
 
             Name = competition.Name;
             Category = competition.Category;
