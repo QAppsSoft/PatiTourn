@@ -25,8 +25,12 @@ namespace ViewModels.Modules.Teams
         public TeamsViewModel(IEntityService<Team> teamsService, ISchedulerProvider schedulerProvider,
             Competition competition)
         {
-            _teamsService = teamsService ?? throw new ArgumentNullException(nameof(teamsService));
-            _competition = competition ?? throw new ArgumentNullException(nameof(competition));
+            ArgumentNullException.ThrowIfNull(teamsService);
+            ArgumentNullException.ThrowIfNull(schedulerProvider);
+            ArgumentNullException.ThrowIfNull(competition);
+
+            _teamsService = teamsService;
+            _competition = competition;
 
             var transform = teamsService.List.Connect()
                 .Transform(team => new TeamProxy(team))

@@ -10,6 +10,8 @@ namespace Common
     {
         public static string Description(this Enum value)
         {
+            ArgumentNullException.ThrowIfNull(value);
+
             var attributes = value.GetType()
                 .GetField(value.ToString())
                 .GetCustomAttributes(typeof(DescriptionAttribute), false);
@@ -29,6 +31,8 @@ namespace Common
 
         public static IEnumerable<ValueDescription> GetAllValuesAndDescriptions(Type type)
         {
+            ArgumentNullException.ThrowIfNull(type);
+
             if (!type.IsEnum)
             {
                 throw new ArgumentException($"{nameof(type)} must be an enum type", nameof(type));
@@ -41,6 +45,8 @@ namespace Common
 
         public static List<Enum> GetAllValues(Type type)
         {
+            ArgumentNullException.ThrowIfNull(type);
+
             if (!type.IsEnum)
             {
                 throw new ArgumentException($"{nameof(type)} must be an enum type", nameof(type));

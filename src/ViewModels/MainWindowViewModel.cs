@@ -19,8 +19,13 @@ namespace ViewModels
         public MainWindowViewModel(CompetitionsViewModel competitionsViewModel, ISchedulerProvider schedulerProvider,
             Func<Competition, TeamsViewModel> teamsFactory, Func<Competition, SkatersViewModel> skatersFactory)
         {
-            CompetitionsViewModel =
-                competitionsViewModel ?? throw new ArgumentNullException(nameof(competitionsViewModel));
+            ArgumentNullException.ThrowIfNull(competitionsViewModel);
+            ArgumentNullException.ThrowIfNull(schedulerProvider);
+            ArgumentNullException.ThrowIfNull(teamsFactory);
+            ArgumentNullException.ThrowIfNull(skatersFactory);
+
+
+            CompetitionsViewModel = competitionsViewModel;
 
             CompetitionsDialog = new Interaction<CompetitionsViewModel, CompetitionProxy>(schedulerProvider.Dispatcher);
 
