@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:skaters="clr-namespace:ViewModels.Modules.Skaters;assembly=ViewModels"
              xmlns:converters="clr-namespace:PatiTournApp.Converters"
-             xmlns:teams="clr-namespace:ViewModels.Modules.Teams;assembly=ViewModels"
+             xmlns:dataModel="clr-namespace:DataModel;assembly=DataModel"
              mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="450"
              x:DataType="skaters:SkaterProxy"
              x:CompileBindings="True"
@@ -30,7 +30,7 @@
         <TextBlock Text="Team:" />
         <ComboBox SelectedItem="{Binding Team}" Items="{Binding Teams}">
             <ComboBox.ItemTemplate>
-                <DataTemplate x:DataType="teams:TeamProxy" DataType="teams:TeamProxy">
+                <DataTemplate x:DataType="dataModel:Team" DataType="dataModel:Team">
                     <TextBlock Text="{Binding Name}"></TextBlock>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
