@@ -7,10 +7,11 @@ The current competition system is based on an excel table, which, although it fu
 
 ### TODO
 
-- [x] Implement Competitions management
-- [x] Implement Teams management
-- [x] Implement Skaters management
-- [ ] Implement Events management
+- [x] Competitions management
+- [x] Teams management
+- [x] Skaters management
+- [ ] Events management
+  - [ ] Circuit Type (Track or Road)
   - [ ] Time trials
   - [ ] Sprint races
   - [ ] Elimination races
@@ -20,8 +21,9 @@ The current competition system is based on an excel table, which, although it fu
   - [ ] Distance races
   - [ ] Marathons
 - [ ] Results
+  - [ ] Per event
   - [ ] Points
-    - [ ] Per skaters
+    - [ ] Per Skater
     - [ ] Per Team
   - [ ] Medals
     - [ ] Per Team
@@ -29,4 +31,3 @@ The current competition system is based on an excel table, which, although it fu
 - [ ] Export Results
   - [ ] Print
   - [ ] Digital copy
-
