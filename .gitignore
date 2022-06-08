@@ -371,6 +371,7 @@ MigrationBackup/
 **/.idea/**/*.iml
 **/.idea/**/contentModel.xml
 **/.idea/**/modules.xml
+.idea/
 
 *.suo
 *.user
@@ -383,6 +384,3 @@ _UpgradeReport_Files/
 Thumbs.db
 Desktop.ini
 .DS_Store
-
-
-/.idea/.idea.QApps.PatiTourn/.idea
