@@ -61,7 +61,7 @@ namespace PatiTournApp
             context?.Database.EnsureCreated();
 #endif
 #if !DEBUG
-            using var context = Services.GetService<PatiTournDataBaseContext>();
+            using var context = services.GetService<PatiTournDataBaseContext>();
             context?.Database.Migrate();
 #endif
         }
