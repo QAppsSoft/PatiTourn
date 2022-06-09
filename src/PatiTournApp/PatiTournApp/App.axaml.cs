@@ -33,7 +33,7 @@ namespace PatiTournApp
 
             ConfigureDatabase();
 
-            var viewModel = services.GetService<MainWindowViewModel>();
+            var viewModel = services.GetRequiredService<MainWindowViewModel>();
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
@@ -43,7 +43,7 @@ namespace PatiTournApp
                 var onShutdown = Observable.FromEventPattern<ShutdownRequestedEventArgs>(
                         handler => desktop.ShutdownRequested += handler,
                         handler => desktop.ShutdownRequested -= handler)
-                    .Subscribe(_ => services.GetService<PatiTournDataBaseContext>()?.Database.EnsureDeleted());
+                    .Subscribe(_ => services.GetRequiredService<PatiTournDataBaseContext>().Database.EnsureDeleted());
 #endif
             }
             else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
@@ -57,11 +57,11 @@ namespace PatiTournApp
         private static void ConfigureDatabase()
         {
 #if DEBUG
-            using var context = services.GetService<PatiTournDataBaseContext>();
+            using var context = services.GetRequiredService<PatiTournDataBaseContext>();
             context?.Database.EnsureCreated();
 #endif
 #if !DEBUG
-            using var context = services.GetService<PatiTournDataBaseContext>();
+            using var context = services.GetRequiredService<PatiTournDataBaseContext>();
             context?.Database.Migrate();
 #endif
         }
