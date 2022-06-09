@@ -10,7 +10,7 @@
         Icon="/Assets/avalonia-logo.ico"
         x:DataType="viewModels:MainWindowViewModel"
         x:CompileBindings="True"
-        Title="{Binding CompetitionExtended.Name, StringFormat='PatiTourn App | {0}', FallbackValue='PatiTourn App'}">
+        Title="{Binding CompetitionExtended.Name, StringFormat='PatiTourn | {0}', FallbackValue='PatiTourn'}">
     <Window.DataTemplates>
         <DataTemplate DataType="competitions:CompetitionExtendedProxy" x:DataType="competitions:CompetitionExtendedProxy">
             <competitionsViews:CompetitionExtendedProxyView />
