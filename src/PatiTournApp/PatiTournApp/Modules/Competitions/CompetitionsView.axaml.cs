@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -45,8 +46,8 @@ namespace PatiTournApp.Modules.Competitions
             {
                 Content = new CompetitionProxyView(),
                 DataContext = competitionProxy,
-                Title = "Add competition",
-                PrimaryButtonText = "Ok",
+                Title = Languages.Resources.AddCompetition,
+                PrimaryButtonText = Languages.Resources.Ok,
                 DefaultButton = ContentDialogButton.Primary,
             };
 
@@ -65,11 +66,13 @@ namespace PatiTournApp.Modules.Competitions
 
             var dialog = new ContentDialog
             {
-                Title = "Delete competition",
-                Content = $"Do you want to delete the \"{interaction.Input.Name}\" competition.",
-                PrimaryButtonText = "Delete",
+                Title = Languages.Resources.DeleteCompetition,
+                Content =
+                    string.Format(CultureInfo.CurrentCulture, Languages.Resources.DeleteCompetitionContent,
+                        interaction.Input.Name),
+                PrimaryButtonText = Languages.Resources.Delete,
                 PrimaryButtonCommand = deleteDialogViewModel.OkCommand,
-                CloseButtonText = "Cancel",
+                CloseButtonText = Languages.Resources.Delete,
                 CloseButtonCommand = deleteDialogViewModel.CancelCommand
             };
 
@@ -86,8 +89,8 @@ namespace PatiTournApp.Modules.Competitions
             {
                 Content = new CompetitionProxyView(),
                 DataContext = competitionProxy,
-                Title = "Edit competition",
-                PrimaryButtonText = "Ok"
+                Title = Languages.Resources.EditCompetition,
+                PrimaryButtonText = Languages.Resources.Ok,
             };
 
             using var _ = competitionProxy.IsValid()

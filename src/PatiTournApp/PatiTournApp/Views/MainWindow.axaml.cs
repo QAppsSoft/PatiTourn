@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia;
-using Avalonia.Controls.Mixins;
 using Avalonia.Threading;
 using Common.Extensions;
 using ReactiveUI;
 using ViewModels;
 using FluentAvalonia.UI.Controls;
 using PatiTournApp.Modules.Competitions;
-using ReactiveUI.Validation.Extensions;
 using ViewModels.Modules.Competitions;
 
 namespace PatiTournApp.Views
@@ -23,14 +20,14 @@ namespace PatiTournApp.Views
         public MainWindow()
         {
             InitializeComponent();
-            
+
             this.GetObservable(DataContextProperty).Subscribe(OnDataContextChanged);
             this.GetObservable(ViewModelProperty).Subscribe(OnViewModelChanged);
 
             this.BindInteraction(ViewModel,
                 vm => vm.CompetitionsDialog,
                 DoShowCompetitionsDialogAsync);
-            
+
             this.WhenAnyValue(x => x.ViewModel)
                 .ToUnit()
                 .InvokeCommand(this, x => x.ViewModel.CompetitionsViewModel.Refresh);
@@ -44,8 +41,8 @@ namespace PatiTournApp.Views
             {
                 Content = new CompetitionsView(),
                 DataContext = competitionsViewModel,
-                Title = "Search competition",
-                PrimaryButtonText = "Ok"
+                Title = Languages.Resources.SelectCompetition,
+                PrimaryButtonText = Languages.Resources.Ok,
             };
 
             using var _ = competitionsViewModel

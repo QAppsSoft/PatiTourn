@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -45,8 +46,8 @@ namespace PatiTournApp.Modules.Teams
             {
                 Content = new TeamProxyView(),
                 DataContext = teamProxy,
-                Title = "Add team",
-                PrimaryButtonText = "Ok",
+                Title = Languages.Resources.AddTeam,
+                PrimaryButtonText = Languages.Resources.Ok,
                 DefaultButton = ContentDialogButton.Primary,
             };
 
@@ -70,12 +71,14 @@ namespace PatiTournApp.Modules.Teams
 
             var dialog = new ContentDialog
             {
-                Title = "Delete team",
-                Content = $"Do you want to delete the \"{interaction.Input.Name}\" team.",
-                PrimaryButtonText = "Delete",
+                Title = Languages.Resources.DeleteTeam,
+                Content =
+                    string.Format(CultureInfo.CurrentCulture, Languages.Resources.DeleteTeamContent,
+                        interaction.Input.Name),
+                PrimaryButtonText = Languages.Resources.Delete,
                 PrimaryButtonCommand = deleteDialogViewModel.OkCommand,
-                CloseButtonText = "Cancel",
-                CloseButtonCommand = deleteDialogViewModel.CancelCommand
+                CloseButtonText = Languages.Resources.Cancel,
+                CloseButtonCommand = deleteDialogViewModel.CancelCommand,
             };
 
             await dialog.ShowAsync().ConfigureAwait(false);
@@ -91,8 +94,8 @@ namespace PatiTournApp.Modules.Teams
             {
                 Content = new TeamProxyView(),
                 DataContext = teamProxy,
-                Title = "Edit team",
-                PrimaryButtonText = "Ok",
+                Title = Languages.Resources.EditTeam,
+                PrimaryButtonText = Languages.Resources.Ok,
                 DefaultButton = ContentDialogButton.Primary,
             };
 

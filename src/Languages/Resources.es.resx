@@ -1,0 +1,105 @@
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    </value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    </value>
+  </resheader>
+  <data name="FilterCompetitionsList" xml:space="preserve">
+    <value>Filtrar listado de competencias</value>
+  </data>
+  <data name="AddCompetition" xml:space="preserve">
+    <value>Agregar competencia</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Aceptar</value>
+  </data>
+  <data name="DeleteCompetition" xml:space="preserve">
+    <value>Eliminar competencia</value>
+  </data>
+  <data name="DeleteCompetitionContent" xml:space="preserve">
+    <value>Deseas eliminar la competición \"{0}\"</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="EditCompetition" xml:space="preserve">
+    <value>Editar competición</value>
+  </data>
+  <data name="NameWithColon" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="CategoryWithColon" xml:space="preserve">
+    <value>Categoria:</value>
+  </data>
+  <data name="StartDateWithColon" xml:space="preserve">
+    <value>Fecha de inicio:</value>
+  </data>
+  <data name="EndDateWithColon" xml:space="preserve">
+    <value>Fecha de cierre:</value>
+  </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Equipos</value>
+  </data>
+  <data name="Skaters" xml:space="preserve">
+    <value>Patinadores</value>
+  </data>
+  <data name="SelectCompetition" xml:space="preserve">
+    <value>Seleccionar competencia</value>
+  </data>
+  <data name="LastNamesWithColon" xml:space="preserve">
+    <value>Apellidos:</value>
+  </data>
+  <data name="IdentityNumberWithColon" xml:space="preserve">
+    <value>Número de identidad:</value>
+  </data>
+  <data name="SexWithColon" xml:space="preserve">
+    <value>Sexo:</value>
+  </data>
+  <data name="NumberWithColon" xml:space="preserve">
+    <value>Número:</value>
+  </data>
+  <data name="TeamWithColon" xml:space="preserve">
+    <value>Equipo:</value>
+  </data>
+  <data name="AddSkater" xml:space="preserve">
+    <value>Agregar patinador</value>
+  </data>
+  <data name="DeleteSkater" xml:space="preserve">
+    <value>Eliminar patinador</value>
+  </data>
+  <data name="DeleteSkaterContent" xml:space="preserve">
+    <value>Deseas eliminar el patinador \"{0}\"</value>
+  </data>
+  <data name="EditSkater" xml:space="preserve">
+    <value>Editar patinador</value>
+  </data>
+  <data name="DescriptionWithColon" xml:space="preserve">
+    <value>Descripción:</value>
+  </data>
+  <data name="AddTeam" xml:space="preserve">
+    <value>Agregar equipo</value>
+  </data>
+  <data name="DeleteTeam" xml:space="preserve">
+    <value>Eliminar equipo</value>
+  </data>
+  <data name="EditTeam" xml:space="preserve">
+    <value>Editar equipo</value>
+  </data>
+  <data name="DeleteTeamContent" xml:space="preserve">
+    <value>Deseas eliminar el equipo \"{0}\"</value>
+  </data>
+</root>

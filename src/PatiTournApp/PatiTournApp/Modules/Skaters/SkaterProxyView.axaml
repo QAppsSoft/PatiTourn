@@ -5,29 +5,30 @@
              xmlns:skaters="clr-namespace:ViewModels.Modules.Skaters;assembly=ViewModels"
              xmlns:converters="clr-namespace:PatiTournApp.Converters"
              xmlns:dataModel="clr-namespace:DataModel;assembly=DataModel"
+             xmlns:languages="clr-namespace:Languages;assembly=Languages"
              mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="450"
              x:DataType="skaters:SkaterProxy"
              x:CompileBindings="True"
              x:Class="PatiTournApp.Modules.Skaters.SkaterProxyView">
     <StackPanel>
-        <TextBlock Text="Name:" />
+        <TextBlock Text="{x:Static languages:Resources.NameWithColon}" />
         <TextBox Text="{Binding Name}" />
 
-        <TextBlock Text="Last name:" />
+        <TextBlock Text="{x:Static languages:Resources.LastNamesWithColon}" />
         <TextBox Text="{Binding LastNames}" />
 
-        <TextBlock Text="Identity number:" />
+        <TextBlock Text="{x:Static languages:Resources.IdentityNumberWithColon}" />
         <TextBox Text="{Binding IdentificationNumber}" />
 
-        <TextBlock Text="Sex:" />
+        <TextBlock Text="{x:Static languages:Resources.SexWithColon}" />
         <ComboBox
             Items="{Binding Path=Sex, Converter={converters:EnumToCollectionConverter}, Mode=OneTime}"
             SelectedItem="{Binding Path=Sex}" />
         
-        <TextBlock Text="Number:" />
+        <TextBlock Text="{x:Static languages:Resources.NumberWithColon}" />
         <TextBox Text="{Binding Number}" />
 
-        <TextBlock Text="Team:" />
+        <TextBlock Text="{x:Static languages:Resources.TeamWithColon}" />
         <ComboBox SelectedItem="{Binding Team}" Items="{Binding Teams}">
             <ComboBox.ItemTemplate>
                 <DataTemplate x:DataType="dataModel:Team" DataType="dataModel:Team">
