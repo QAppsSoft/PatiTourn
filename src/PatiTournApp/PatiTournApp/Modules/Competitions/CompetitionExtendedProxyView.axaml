@@ -7,6 +7,7 @@
              xmlns:views="clr-namespace:PatiTournApp.Modules.Teams"
              xmlns:skaters="clr-namespace:ViewModels.Modules.Skaters;assembly=ViewModels"
              xmlns:skaters1="clr-namespace:PatiTournApp.Modules.Skaters"
+             xmlns:languages="clr-namespace:Languages;assembly=Languages"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="competitions:CompetitionExtendedProxy"
              x:CompileBindings="True"
@@ -20,10 +21,10 @@
         </DataTemplate>
     </UserControl.DataTemplates>
     <TabControl>
-        <TabItem Header="Teams">
+        <TabItem Header="{x:Static languages:Resources.Teams}">
             <ContentControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="{Binding TeamsViewModel}" />
         </TabItem>
-        <TabItem Header="Skaters">
+        <TabItem Header="{x:Static languages:Resources.Skaters}">
             <ContentControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="{Binding SkatersViewModel}" />
         </TabItem>
     </TabControl>

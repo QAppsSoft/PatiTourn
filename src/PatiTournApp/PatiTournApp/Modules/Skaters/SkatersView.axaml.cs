@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -45,8 +46,8 @@ namespace PatiTournApp.Modules.Skaters
             {
                 Content = new SkaterProxyView(),
                 DataContext = skaterProxy,
-                Title = "Add skater",
-                PrimaryButtonText = "Ok",
+                Title = Languages.Resources.AddSkater,
+                PrimaryButtonText = Languages.Resources.Ok,
                 DefaultButton = ContentDialogButton.Primary,
             };
 
@@ -65,12 +66,14 @@ namespace PatiTournApp.Modules.Skaters
 
             var dialog = new ContentDialog
             {
-                Title = "Delete skater",
-                Content = $"Do you want to delete the \"{interaction.Input.Name}\" skater.",
-                PrimaryButtonText = "Delete",
+                Title = Languages.Resources.DeleteSkater,
+                Content =
+                    string.Format(CultureInfo.CurrentCulture, Languages.Resources.DeleteSkaterContent,
+                        interaction.Input.Name),
+                PrimaryButtonText = Languages.Resources.Delete,
                 PrimaryButtonCommand = deleteDialogViewModel.OkCommand,
-                CloseButtonText = "Cancel",
-                CloseButtonCommand = deleteDialogViewModel.CancelCommand
+                CloseButtonText = Languages.Resources.Cancel,
+                CloseButtonCommand = deleteDialogViewModel.CancelCommand,
             };
 
             await dialog.ShowAsync().ConfigureAwait(false);
@@ -86,8 +89,8 @@ namespace PatiTournApp.Modules.Skaters
             {
                 Content = new SkaterProxyView(),
                 DataContext = skaterProxy,
-                Title = "Edit skater",
-                PrimaryButtonText = "Ok",
+                Title = Languages.Resources.EditSkater,
+                PrimaryButtonText = Languages.Resources.Ok,
                 DefaultButton = ContentDialogButton.Primary,
             };
 
