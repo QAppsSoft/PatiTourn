@@ -7,17 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Default.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Default.Designer.cs</LastGenOutput>
+    <EmbeddedResource Update="Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Default.es.resx">
+    <EmbeddedResource Update="Resources.es.resx">
+      <DependentUpon>Default.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources.en.resx">
       <DependentUpon>Default.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Default.Designer.cs">
+    <Compile Update="Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Default.resx</DependentUpon>
