@@ -34,8 +34,9 @@ namespace PatiTournApp.Modules.Teams
                 DoAddDialogAsync);
 
             this.WhenAnyValue(x => x.ViewModel)
+                .WhereNotNull()
                 .ToUnit()
-                .InvokeCommand(this, x => x.ViewModel.Refresh);
+                .InvokeCommand(this, x => x.ViewModel!.Refresh);
         }
 
         private static async Task DoAddDialogAsync(InteractionContext<TeamProxy, bool> interaction)

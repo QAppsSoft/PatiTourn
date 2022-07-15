@@ -34,8 +34,9 @@ namespace PatiTournApp.Modules.Skaters
                 DoAddDialogAsync);
 
             this.WhenAnyValue(x => x.ViewModel)
+                .WhereNotNull()
                 .ToUnit()
-                .InvokeCommand(this, x => x.ViewModel.Refresh);
+                .InvokeCommand(this, x => x.ViewModel!.Refresh);
         }
 
         private static async Task DoAddDialogAsync(InteractionContext<SkaterProxy, bool> interaction)

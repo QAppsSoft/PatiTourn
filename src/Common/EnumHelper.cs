@@ -26,7 +26,7 @@ namespace Common
             // You can add your own custom default formatting logic here
             var ti = CultureInfo.CurrentCulture.TextInfo;
 
-            return ti.ToTitleCase(ti.ToLower(value.ToString().Replace("_", " ")));
+            return ti.ToTitleCase(ti.ToLower(value.ToString().Replace("_", " ", StringComparison.InvariantCulture)));
         }
 
         public static IEnumerable<ValueDescription> GetAllValuesAndDescriptions(Type type)
@@ -43,7 +43,7 @@ namespace Common
                 .ToList();
         }
 
-        public static List<Enum> GetAllValues(Type type)
+        public static IList<Enum> GetAllValues(Type type)
         {
             ArgumentNullException.ThrowIfNull(type);
 

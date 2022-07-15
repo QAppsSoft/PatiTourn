@@ -29,8 +29,9 @@ namespace PatiTournApp.Views
                 DoShowCompetitionsDialogAsync);
 
             this.WhenAnyValue(x => x.ViewModel)
+                .WhereNotNull()
                 .ToUnit()
-                .InvokeCommand(this, x => x.ViewModel.CompetitionsViewModel.Refresh);
+                .InvokeCommand(this, x => x.ViewModel!.CompetitionsViewModel.Refresh);
         }
 
         private static async Task DoShowCompetitionsDialogAsync(InteractionContext<CompetitionsViewModel, CompetitionProxy> interaction)

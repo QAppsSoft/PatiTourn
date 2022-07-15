@@ -8,12 +8,14 @@ namespace PatiTournApp.Converters
 {
     public class EnumToCollectionConverter : MarkupExtension, IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
+            ArgumentNullException.ThrowIfNull(value);
+
             return EnumHelper.GetAllValues(value.GetType());
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             return null;
         }
