@@ -14,7 +14,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
-		<PackageReference Include="Meziantou.Analyzer" Version="1.0.704">
+		<PackageReference Include="Meziantou.Analyzer" Version="1.0.705">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
