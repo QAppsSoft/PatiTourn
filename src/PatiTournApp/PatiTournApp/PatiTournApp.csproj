@@ -15,7 +15,7 @@
 		<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
 		<PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
 		<PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.18" />
-		<PackageReference Include="DynamicData" Version="7.12.11" />
+		<PackageReference Include="DynamicData" Version="7.13.1" />
 		<PackageReference Include="FluentAvaloniaUI" Version="1.4.5" />
 		<PackageReference Include="Meziantou.Analyzer" Version="2.0.19">
 		  <PrivateAssets>all</PrivateAssets>

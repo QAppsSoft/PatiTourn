@@ -6,7 +6,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DynamicData" Version="7.12.11" />
+		<PackageReference Include="DynamicData" Version="7.13.1" />
 		<PackageReference Include="Meziantou.Analyzer" Version="2.0.19">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
