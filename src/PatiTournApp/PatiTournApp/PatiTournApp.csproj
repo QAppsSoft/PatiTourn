@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
@@ -17,7 +17,7 @@
 		<PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.19" />
 		<PackageReference Include="DynamicData" Version="7.13.1" />
 		<PackageReference Include="FluentAvaloniaUI" Version="1.4.5" />
-		<PackageReference Include="Meziantou.Analyzer" Version="2.0.26">
+		<PackageReference Include="Meziantou.Analyzer" Version="2.0.29">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
